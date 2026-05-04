@@ -1,0 +1,53 @@
+[
+  {
+    "id": "hero-1",
+    "component": "HeroSection",
+    "props": {
+      "title": "",
+      "subtitle": "Custom Development & Legacy Modernization"
+    }
+  },
+  {
+    "id": "bento-1",
+    "component": "BentoGrid",
+    "props": {
+      "items": [
+        {
+          "title": "Innovación Digital",
+          "description": "Transformamos ideas en productos digitales de alto impacto.",
+          "size": "2x2"
+        },
+        {
+          "title": "Arquitectura Cloud",
+          "description": "Infraestructura escalable y segura.",
+          "size": "1x1"
+        },
+        {
+          "title": "IA Generativa",
+          "description": "Modelos personalizados para su negocio.",
+          "size": "2x1"
+        },
+        {
+          "title": "Experiencia de Usuario",
+          "description": "Interfaces que cautivan y convierten.",
+          "size": "1x1"
+        },
+        {
+          "title": "Consultoría Estratégica",
+          "description": "Acompañamos su crecimiento tecnológico.",
+          "size": "2x1"
+        }
+      ]
+    }
+  },
+  {
+    "id": "story-1",
+    "component": "StorytellingSection",
+    "props": {}
+  },
+  {
+    "id": "master-1",
+    "component": "MasterclassSection",
+    "props": {}
+  }
+]

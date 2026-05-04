@@ -1,89 +1,134 @@
 <script setup>
-import KodanLogo from './components/KodanLogo.vue';
-import BentoGrid from './components/BentoGrid.vue';
-
+import { onMounted, ref } from 'vue';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import KodanLogoDark from './components/kodanLogoDark.vue';
 import StorytellingSection from './components/StorytellingSection.vue';
 import MasterclassSection from './components/MasterclassSection.vue';
-import NotificationSystem from './components/NotificationSystem.vue';
 import ColorConfigurator from './components/ColorConfigurator.vue';
+import NotificationSystem from './components/NotificationSystem.vue';
 import { useNotificationStore } from './stores/notificationStore';
-import { onMounted } from 'vue';
-import gsap from 'gsap';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const notificationStore = useNotificationStore();
+const logoWrapper = ref(null);
+const scrollPrompt = ref(null);
 
 onMounted(() => {
-  notificationStore.notify('KODAN Architecture inicializado con éxito', 'success');
+  // 1. Estado Inicial Absoluto (Control total GSAP)
+  gsap.set(logoWrapper.value, {
+    top: "50%",
+    left: "50%",
+    xPercent: -50,
+    yPercent: -50,
+    scale: 1.1,
+    opacity: 1
+  });
 
-  // Animación de entrada para el Hero
-  gsap.from(".hero", {
+  // 2. Animación Maestra: Transición de Hero a Nav (Cinemática Seda)
+  gsap.to(logoWrapper.value, {
+    scrollTrigger: {
+      trigger: "body",
+      start: "top top",
+      end: "600px top", // Recorrido calibrado para fluidez
+      scrub: 2, // Inercia premium
+      invalidateOnRefresh: true
+    },
+    top: "2.5rem",
+    left: "2.5rem",
+    xPercent: 0,
+    yPercent: 0,
+    scale: 0.75,
+    ease: "power2.inOut"
+  });
+
+  // 3. Conmutación Binaria del Prompt
+  gsap.to(scrollPrompt.value, {
+    scrollTrigger: {
+      trigger: "body",
+      start: "10px top",
+      toggleActions: "play none none reverse",
+    },
     opacity: 0,
-    scale: 0.95,
-    duration: 1.2,
-    ease: "power3.out"
+    y: -20,
+    duration: 0.3,
+    ease: "power2.inOut"
   });
 });
-
-const bentoItems = [
-  { title: 'Innovación Digital', description: 'Transformamos ideas en productos digitales de alto impacto.', size: '2x2' },
-  { title: 'Arquitectura Cloud', description: 'Infraestructura escalable y segura.', size: '1x1' },
-  { title: 'IA Generativa', description: 'Modelos personalizados para su negocio.', size: '2x1' },
-  { title: 'Experiencia de Usuario', description: 'Interfaces que cautivan y convierten.', size: '1x1' },
-  { title: 'Consultoría Estratégica', description: 'Acompañamos su crecimiento tecnológico.', size: '2x1' }
-];
 </script>
 
 <template>
   <main class="app-container">
-    <header class="hero">
-      <KodanLogo :size="400" class="mx-auto mb-4" />
-      <p class="mt-4">Desarrollo Institucional de Próxima Generación</p>
+    <!-- Capa de Marca Dinámica (Persistente) -->
+    <div ref="logoWrapper" class="logo-dynamic-wrapper">
+      <KodanLogoDark :size="400" />
+    </div>
 
-    </header>
+    <!-- Secuenciación Narrativa -->
+    <div class="page-content">
+      <!-- 1. Hero / Intro -->
+      <section class="hero-spacer">
+        <div ref="scrollPrompt" class="scroll-prompt">Scroll para iniciar</div>
+      </section>
 
-    <BentoGrid :items="bentoItems" />
-    
-    <StorytellingSection />
+      <!-- 2. Storytelling Section -->
+      <StorytellingSection />
 
-    <MasterclassSection />
+      <!-- 3. Masterclass Section -->
+      <MasterclassSection />
 
-    <div class="spacer"></div>
+      <!-- 4. Footer & Configurator -->
+      <ColorConfigurator />
+    </div>
+
     <NotificationSystem />
-    <ColorConfigurator />
   </main>
 </template>
 
 <style>
 .app-container {
-  min-height: 100vh;
-  padding: 4rem 2rem;
+  background: var(--bg-global);
+  color: var(--text-body);
+  min-height: 300vh;
 }
 
-.hero {
-  text-align: center;
-  margin-bottom: 4rem;
+.logo-dynamic-wrapper {
+  position: fixed;
+  z-index: 1000;
+  will-change: transform, top, left;
+  pointer-events: none;
 }
 
-.hero h1 {
-  font-family: var(--font-serif);
-  font-size: 5rem;
-  font-weight: 900;
-  letter-spacing: -3px;
-  margin-bottom: 1rem;
+.logo-dynamic-wrapper > * {
+  pointer-events: auto;
 }
 
-.hero .accent {
-  background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.page-content {
+  position: relative;
+  z-index: 1;
 }
 
-.hero p {
-  font-size: 1.25rem;
-  color: var(--color-text-muted);
+.hero-spacer {
+  height: 100vh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 5rem;
 }
 
-.spacer {
-  height: 50vh;
+.scroll-prompt {
+  font-family: monospace;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  color: var(--color-mint);
+  opacity: 0.5; /* Opacidad Base Estable */
+  animation: bounce 2s infinite ease-in-out;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 </style>

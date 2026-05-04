@@ -1,181 +1,172 @@
+<script setup lang="ts">
+import { onMounted, ref } from 'vue';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { TextPlugin } from 'gsap/TextPlugin';
+
+gsap.registerPlugin(ScrollTrigger, TextPlugin);
+
+const sectionRef = ref<HTMLElement | null>(null);
+const lifelineRef = ref<HTMLElement | null>(null);
+const terminalRefs = ref<HTMLElement[]>([]);
+
+const setTerminalRef = (el: any) => {
+  if (el) terminalRefs.value.push(el);
+};
+
+onMounted(() => {
+  if (!sectionRef.value || !lifelineRef.value) return;
+
+  // 1. Línea de Vida Platino (Scroll-linked)
+  gsap.to(lifelineRef.value, {
+    height: "100%",
+    ease: "none",
+    scrollTrigger: {
+      trigger: sectionRef.value,
+      start: "top 20%",
+      end: "bottom 80%",
+      scrub: 0.5,
+    }
+  });
+
+  // 2. Terminal Typewriter Effect
+  terminalRefs.value.forEach((el, index) => {
+    const text = el.getAttribute('data-text') || "";
+    el.innerText = ""; // Limpiar para el efecto
+
+    gsap.to(el, {
+      duration: 2,
+      text: text,
+      scrollTrigger: {
+        trigger: el,
+        start: "top 80%",
+        toggleActions: "play none none none"
+      },
+      delay: index * 0.2
+    });
+  });
+});
+
+const milestones = [
+  { year: "2024", title: "KODAN Protocol V1", desc: "Despliegue de arquitectura escalable." },
+  { year: "2023", title: "Legacy Forge", desc: "Refactorización de sistemas críticos." },
+  { year: "2022", title: "Digital Silk Foundation", desc: "Lanzamiento del motor visual." },
+  { year: "2021", title: "Quantum Genesis", desc: "Investigación en algoritmos adaptativos." },
+];
+</script>
+
 <template>
-  <section class="masterclass-section">
-    <div class="header">
-      <span class="label">Soluciones Estratégicas</span>
-      <h2>Nuestras Masterclasses</h2>
-      <p>Transformamos herramientas en activos intelectuales y operativos.</p>
-    </div>
+  <section ref="sectionRef" class="masterclass-container">
+    <div class="platinum-lifeline" ref="lifelineRef"></div>
 
-    <div class="masterclass-grid">
-      <article class="masterclass-card timetracker">
-        <div class="card-content">
-          <span class="tag">Módulo 01</span>
-          <h3>Masterclass: Eficiencia Operativa con TimeTracker</h3>
-          <p>No es solo seguimiento de tiempo; es la optimización de la energía corporativa. Aprenda a identificar cuellos de botella y potenciar la productividad mediante análisis predictivo.</p>
-          <div class="footer">
-            <span class="duration">45 min de lectura estratégica</span>
-            <button class="access-btn">Acceder al White Paper</button>
+    <div class="masterclass-content">
+      <header class="masterclass-header">
+        <span class="mono-tag">Core Technical / Masterclass</span>
+        <h2>El Núcleo Técnico</h2>
+      </header>
+
+      <div class="milestones-list">
+        <div v-for="(milestone, index) in milestones" :key="index" class="milestone-item">
+          <div class="milestone-marker"></div>
+          <div class="milestone-body">
+            <span class="milestone-year">{{ milestone.year }}</span>
+            <h3 :ref="setTerminalRef" :data-text="milestone.title" class="mono-title">_</h3>
+            <p>{{ milestone.desc }}</p>
           </div>
         </div>
-      </article>
-
-      <article class="masterclass-card smartcook">
-        <div class="card-content">
-          <span class="tag">Módulo 02</span>
-          <h3>Masterclass: Gastronomía Inteligente con SmartCook</h3>
-          <p>La digitalización de la cocina como ventaja competitiva. Descubra cómo la inteligencia artificial redefine la gestión de recursos y la experiencia del cliente.</p>
-          <div class="footer">
-            <span class="duration">30 min de visión técnica</span>
-            <button class="access-btn">Acceder al White Paper</button>
-          </div>
-        </div>
-      </article>
+      </div>
     </div>
   </section>
 </template>
 
-<script setup>
-import { onMounted } from 'vue';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
-
-onMounted(() => {
-  gsap.from(".masterclass-card", {
-    scrollTrigger: {
-      trigger: ".masterclass-grid",
-      start: "top 70%",
-    },
-    opacity: 0,
-    y: 50,
-    duration: 1,
-    stagger: 0.3,
-    ease: "power3.out"
-  });
-});
-</script>
-
 <style scoped>
-.masterclass-section {
-  padding: 8rem 2rem;
-  background: var(--color-bg);
-}
-
-.header {
-  text-align: center;
-  margin-bottom: 5rem;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.label {
-  font-family: var(--font-sans);
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  color: var(--color-primary);
-  display: block;
-  margin-bottom: 1rem;
-}
-
-.header h2 {
-  font-family: var(--font-serif);
-  font-size: 3.5rem;
-  font-weight: 900;
-  margin-bottom: 1.5rem;
-}
-
-.masterclass-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 3rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.masterclass-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 32px;
-  overflow: hidden;
+.masterclass-container {
+  background: #121212;
   position: relative;
-  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  padding: 10rem 10vw;
+  min-height: 150vh;
 }
 
-.masterclass-card:hover {
-  transform: translateY(-10px);
-  border-color: var(--color-primary);
-  box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5);
+.platinum-lifeline {
+  position: absolute;
+  left: 5vw;
+  top: 10rem;
+  width: 2px;
+  height: 0%;
+  background: linear-gradient(to bottom, #BFC1C2, #E0E0E0, transparent);
+  box-shadow: 0 0 15px rgba(191, 193, 194, 0.3);
+  z-index: 1;
 }
 
-.card-content {
-  padding: 3.5rem;
-  height: 100%;
+.masterclass-content {
+  padding-left: 5vw;
+  position: relative;
+  z-index: 2;
+}
+
+.masterclass-header {
+  margin-bottom: 6rem;
+}
+
+.mono-tag {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  color: var(--color-mint);
+  letter-spacing: 2px;
+  font-size: 0.9rem;
+}
+
+h2 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 300;
+  margin-top: 1rem;
+}
+
+.milestones-list {
   display: flex;
   flex-direction: column;
+  gap: 8rem;
 }
 
-.tag {
-  font-family: var(--font-sans);
-  font-size: 0.7rem;
-  background: var(--color-primary);
-  padding: 4px 12px;
-  border-radius: 4px;
-  width: fit-content;
-  margin-bottom: 2rem;
-}
-
-.masterclass-card h3 {
-  font-family: var(--font-serif);
-  font-size: 2.2rem;
-  font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: 1.5rem;
-}
-
-.masterclass-card p {
-  font-size: 1.1rem;
-  line-height: 1.7;
-  color: var(--color-text-muted);
-  margin-bottom: 3rem;
-  flex-grow: 1;
-}
-
-.footer {
+.milestone-item {
+  position: relative;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-top: 1px solid var(--color-border);
-  padding-top: 2rem;
+  gap: 3rem;
+  align-items: flex-start;
 }
 
-.duration {
-  font-size: 0.85rem;
-  color: var(--color-text-muted);
+.milestone-marker {
+  width: 12px;
+  height: 12px;
+  background: #BFC1C2;
+  border-radius: 50%;
+  margin-top: 0.8rem;
+  box-shadow: 0 0 10px #BFC1C2;
+  flex-shrink: 0;
 }
 
-.access-btn {
-  background: transparent;
-  border: 1px solid var(--color-primary);
-  color: var(--color-primary);
-  padding: 0.75rem 1.5rem;
-  border-radius: 12px;
-  font-family: var(--font-sans);
-  font-size: 0.8rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.milestone-year {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-body);
+  font-size: 1.1rem;
+  opacity: 0.6;
 }
 
-.access-btn:hover {
-  background: var(--color-primary);
-  color: white;
+.mono-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.8rem;
+  color: #fff;
+  margin: 0.5rem 0;
 }
 
-@media (max-width: 1024px) {
-  .masterclass-grid { grid-template-columns: 1fr; }
-  .header h2 { font-size: 2.5rem; }
+p {
+  color: var(--text-body);
+  max-width: 400px;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .masterclass-container { padding: 5rem 5vw; }
+  .platinum-lifeline { left: 20px; }
+  .masterclass-content { padding-left: 30px; }
 }
 </style>

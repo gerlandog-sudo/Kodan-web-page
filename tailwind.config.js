@@ -7,11 +7,21 @@ export default {
   theme: {
     extend: {
       colors: {
-        'kodan-carbon': '#2D3436',
         'kodan-mint': '#00FFC2',
+        'kodan-carbon': '#2D3436',
+        'kodan-pulse': '#635BFF',
+        'kodan-success': '#26DE81',
+        'kodan-warning': '#FFD300',
+        'kodan-error': '#FC5C65',
+        'surface': {
+          'light': '#F7F1E3',
+          'dark': '#161616',
+          'card-light': '#FFFFFF',
+          'card-dark': '#262626',
+        }
       },
       fontFamily: {
-        sans: ['Unbounded', 'system-ui', 'sans-serif'],
+        'sans': ['\"Liberation Sans\"', 'Inter', 'sans-serif'],
       }
     },
   },

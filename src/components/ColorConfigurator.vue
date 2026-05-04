@@ -1,191 +1,149 @@
-<template>
-  <div v-if="isVisible" class="color-configurator">
-    <div class="header">
-      <h3>Configurador de Marca</h3>
-      <button @click="isVisible = false">×</button>
-    </div>
-    
-    <div class="scroll-area">
-      <div v-for="(value, key) in colors" :key="key" class="color-group">
-        <label :for="key">{{ formatLabel(key) }}</label>
-        <div class="input-wrapper">
-          <input 
-            type="color" 
-            :id="key" 
-            v-model="colors[key]" 
-            @input="updateColor(key)"
-          />
-          <input type="text" v-model="colors[key]" @input="updateColor(key)" />
-        </div>
-      </div>
-    </div>
+<script setup lang="ts">
+import { ref } from 'vue';
+import { gsap } from 'gsap';
 
-    <div class="actions">
-      <button @click="exportCSS" class="export-btn">Exportar CSS</button>
-      <button @click="resetColors" class="reset-btn">Reset</button>
-    </div>
-  </div>
-  
-  <button v-else @click="isVisible = true" class="toggle-btn">
-    🎨 Paleta
-  </button>
-</template>
+const activeColor = ref('#00FFC2');
+const isContacting = ref(false);
 
-<script setup>
-import { ref, onMounted } from 'vue';
+const colors = [
+  { name: 'Cyan', hex: '#00FFC2' },
+  { name: 'Persimmon', hex: '#FF6B6B' },
+  { name: 'Neon Green', hex: '#32FF7E' },
+  { name: 'Electric Blue', hex: '#18DCFF' }
+];
 
-const isVisible = ref(false);
-
-const defaultColors = {
-  '--color-primary': '#6366f1',
-  '--color-secondary': '#ec4899',
-  '--color-accent': '#8b5cf6',
-  '--color-bg': '#0f172a',
-  '--color-surface': '#1e293b',
-  '--color-text': '#f8fafc',
-  '--color-text-muted': '#94a3b8'
+const updateColor = (hex: string) => {
+  activeColor.value = hex;
+  document.documentElement.style.setProperty('--color-mint', hex);
 };
 
-const colors = ref({ ...defaultColors });
-
-onMounted(() => {
-  // Cargar desde localStorage si existe
-  const saved = localStorage.getItem('kodan-colors');
-  if (saved) {
-    colors.value = JSON.parse(saved);
-    Object.keys(colors.value).forEach(key => {
-      document.documentElement.style.setProperty(key, colors.value[key]);
+const toggleContact = () => {
+  isContacting.value = !isContacting.value;
+  
+  // Animación Morphing del botón
+  const btn = document.querySelector('.morph-btn');
+  if (isContacting.value) {
+    gsap.to(btn, {
+      borderRadius: '12px',
+      width: '200px',
+      duration: 0.6,
+      ease: 'elastic.out(1, 0.6)'
+    });
+  } else {
+    gsap.to(btn, {
+      borderRadius: '50px',
+      width: '140px',
+      duration: 0.4,
+      ease: 'power2.inOut'
     });
   }
-});
-
-const formatLabel = (key) => {
-  return key.replace('--color-', '').replace('-', ' ').toUpperCase();
-};
-
-const updateColor = (key) => {
-  document.documentElement.style.setProperty(key, colors.value[key]);
-  localStorage.setItem('kodan-colors', JSON.stringify(colors.value));
-};
-
-const resetColors = () => {
-  colors.value = { ...defaultColors };
-  Object.keys(colors.value).forEach(key => {
-    document.documentElement.style.setProperty(key, colors.value[key]);
-  });
-  localStorage.removeItem('kodan-colors');
-};
-
-const exportCSS = () => {
-  let css = ':root {\n';
-  Object.keys(colors.value).forEach(key => {
-    css += `  ${key}: ${colors.value[key]};\n`;
-  });
-  css += '}';
-  
-  navigator.clipboard.writeText(css);
-  alert('CSS copiado al portapapeles. Pégalo en tokens.css para persistir los cambios.');
 };
 </script>
 
+<template>
+  <footer class="vibe-check-container">
+    <div class="configurator glass-premium">
+      <span class="config-label">Ajustar Vibra:</span>
+      <div class="color-options">
+        <button 
+          v-for="color in colors" 
+          :key="color.hex"
+          class="color-dot"
+          :style="{ backgroundColor: color.hex }"
+          :class="{ active: activeColor === color.hex }"
+          @click="updateColor(color.hex)"
+          :title="color.name"
+        ></button>
+      </div>
+    </div>
+
+    <div class="contact-section">
+      <button 
+        class="morph-btn" 
+        @click="toggleContact"
+        :class="{ active: isContacting }"
+      >
+        <span v-if="!isContacting">Contacto</span>
+        <span v-else>hola@kodan.dev</span>
+      </button>
+    </div>
+  </footer>
+</template>
+
 <style scoped>
-.color-configurator {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 300px;
-  background: #1e293b;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-  z-index: 9999;
+.vibe-check-container {
+  padding: 4rem 5vw;
   display: flex;
   flex-direction: column;
-  color: white;
-  font-family: sans-serif;
-}
-
-.header {
-  padding: 1rem;
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 3rem;
+  background: #000;
+  border-top: 1px solid rgba(255,255,255,0.05);
 }
 
-.header h3 { margin: 0; font-size: 1rem; }
-.header button { background: none; border: none; color: white; cursor: pointer; font-size: 1.5rem; }
-
-.scroll-area {
-  padding: 1rem;
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-.color-group {
-  margin-bottom: 1rem;
-}
-
-.color-group label {
-  display: block;
-  font-size: 0.75rem;
-  color: #94a3b8;
-  margin-bottom: 0.5rem;
-}
-
-.input-wrapper {
+.configurator {
   display: flex;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 2rem;
+  border-radius: 50px;
 }
 
-input[type="color"] {
-  border: none;
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-  background: none;
-}
-
-input[type="text"] {
-  flex: 1;
-  background: #0f172a;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
-  padding: 0 0.5rem;
-  border-radius: 4px;
+.config-label {
+  font-family: monospace;
   font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-body);
 }
 
-.actions {
-  padding: 1rem;
+.color-options {
   display: flex;
-  gap: 0.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 1rem;
 }
 
-.export-btn, .reset-btn {
-  flex: 1;
-  padding: 0.5rem;
-  border-radius: 8px;
-  border: none;
+.color-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid transparent;
   cursor: pointer;
-  font-weight: bold;
+  transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
-.export-btn { background: #6366f1; color: white; }
-.reset-btn { background: #334155; color: white; }
+.color-dot:hover {
+  transform: scale(1.2);
+}
 
-.toggle-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  padding: 0.75rem 1.5rem;
-  background: #6366f1;
-  color: white;
+.color-dot.active {
+  border-color: #fff;
+  transform: scale(1.1);
+}
+
+.contact-section {
+  display: flex;
+  justify-content: center;
+}
+
+.morph-btn {
+  width: 140px;
+  height: 50px;
+  background: var(--color-mint);
   border: none;
-  border-radius: 30px;
+  border-radius: 50px;
+  color: #000;
+  font-weight: 700;
+  font-family: "Aptos Display", sans-serif;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.5s ease;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.morph-btn.active {
+  background: #fff;
 }
 </style>

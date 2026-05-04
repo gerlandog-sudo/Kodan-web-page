@@ -7,7 +7,6 @@
         :class="['notification-item', n.type]"
       >
         <div class="content">
-          <div class="icon"></div>
           <span class="message">{{ n.message }}</span>
         </div>
         <div class="progress-bar">
@@ -29,41 +28,48 @@ const store = useNotificationStore();
 <style scoped>
 .notification-container {
   position: fixed;
-  top: 2rem;
-  right: 2rem;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 10000;
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  width: 350px;
+  flex-direction: column-reverse;
+  gap: 0.75rem;
+  width: auto;
+  min-width: 320px;
+  pointer-events: none;
 }
 
 .notification-item {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(15px);
+  pointer-events: auto;
+  background: rgba(20, 20, 20, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
+  border-radius: 2rem; /* Diseño cápsula */
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  position: relative;
 }
 
 .content {
-  padding: 1.25rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+  padding: 1rem 2rem;
+  text-align: center;
 }
 
 .message {
   font-size: 0.9rem;
   font-weight: 500;
-  color: white;
+  color: #fff;
+  letter-spacing: 0.5px;
 }
 
 .progress-bar {
-  height: 3px;
-  background: rgba(255, 255, 255, 0.1);
+  height: 2px;
+  background: rgba(255, 255, 255, 0.05);
   width: 100%;
+  position: absolute;
+  bottom: 0;
 }
 
 .fill {
@@ -78,27 +84,24 @@ const store = useNotificationStore();
   to { transform: scaleX(0); }
 }
 
-/* Colores Funcionales */
-.success .fill { background: #22c55e; }
-.error .fill { background: #ef4444; }
-.warning .fill { background: #f59e0b; }
-.info .fill { background: #8b5cf6; }
+.success .fill { background: var(--color-mint); }
+.error .fill { background: var(--error); }
+.warning .fill { background: var(--warning); }
 
-.success { border-color: rgba(34, 197, 94, 0.3); }
-.error { border-color: rgba(239, 68, 68, 0.3); }
-.warning { border-color: rgba(245, 158, 11, 0.3); }
-.info { border-color: rgba(139, 92, 246, 0.3); }
-
-/* Animaciones Vue */
-.notification-enter-active, .notification-leave-active {
-  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+/* Animación de Resorte (Spring) */
+.notification-enter-active {
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.5); /* Spring Curve */
 }
+.notification-leave-active {
+  transition: all 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+}
+
 .notification-enter-from {
   opacity: 0;
-  transform: translateX(50px) scale(0.9);
+  transform: translateY(50px) scale(0.9);
 }
 .notification-leave-to {
   opacity: 0;
-  transform: translateX(20px);
+  transform: scale(0.8) translateY(20px);
 }
 </style>

@@ -1,10 +1,35 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&family=Unbounded:wght@300;400;700;900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Brand Core */
+  --color-mint: #00FFC2;
+  --color-carbon: #2D3436;
+  --color-pulse: #635BFF;
+  --color-thermal: #8A00FF; /* Accent 2: Violeta Eléctrico */
+
+  /* Surfaces - Seda Digital & Glass */
+  --bg-global: radial-gradient(circle at center, #0A0A0A 0%, #050505 100%);
+  --bg-card: #161616;
+  --bg-glass-premium: rgba(20, 20, 20, 0.6);
+  --bg-hover: #262626;
+  --border: #333333;
+  --border-glow-gradient: linear-gradient(135deg, #BFC1C2 0%, rgba(0, 229, 225, 0.2) 100%);
+
+  /* Typography - High Contrast */
+  --text-h: #F2F2F2;
+  --text-body: #A0A0A0;
+
+  /* Semantics */
+  --success: #26DE81;
+  --warning: #FFD300;
+  --error: #FC5C65;
+
+  color-scheme: dark;
+}
 
 * {
   margin: 0;
@@ -12,27 +37,89 @@
   box-sizing: border-box;
 }
 
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: dark;
-  
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+  background: var(--bg-global) no-repeat;
+  background-attachment: fixed;
+  color: var(--text-body);
+  font-family: 'Liberation Sans', 'Inter', system-ui, sans-serif;
+  transition: color 0.3s ease;
   min-height: 100vh;
 }
 
-#app {
-  width: 100%;
+h1, h2, h3, h4 {
+  color: var(--text-h);
+  font-weight: 700;
+}
+
+/* 5. Estrategia de Aplicación Vanguardista */
+
+/* Glass Premium Surface */
+.glass-premium {
+  background: var(--bg-glass-premium);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+}
+
+/* Border Glow Technique */
+.border-glow {
+  position: relative;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+
+.border-glow::before {
+  content: "";
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  z-index: -1;
+  margin: -1px;
+  border-radius: inherit;
+  background: var(--border-glow-gradient);
+}
+
+/* Thermal Depth Effect */
+.thermal-depth {
+  box-shadow: 0 0 50px rgba(138, 0, 255, 0.1);
+  transition: box-shadow 0.4s ease;
+}
+
+.thermal-depth:hover {
+  box-shadow: 0 0 70px rgba(138, 0, 255, 0.2);
+}
+
+/* Neon Shadow */
+.neon-shadow {
+  box-shadow: 0 0 20px rgba(0, 255, 194, 0.15);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Variable States for Buttons */
+.btn-mint {
+  background-color: var(--color-mint);
+  color: var(--color-carbon);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-mint:hover {
+  /* HSL: 168, 100, 50 -> 168, 100, 40 (10% less lightness) */
+  background-color: hsl(166, 100%, 40%);
+  transform: translateY(-2px);
+}
+
+.btn-mint:active {
+  background-color: hsl(166, 100%, 35%);
+  transform: translateY(0);
+}
+
+/* Syntax Highlighting / Tech Text */
+.tech-data {
+  color: rgba(0, 255, 194, 0.8);
+  font-family: monospace;
 }
