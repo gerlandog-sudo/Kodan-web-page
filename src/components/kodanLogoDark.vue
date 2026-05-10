@@ -15,7 +15,7 @@
       class="logo-svg"
     >
       <defs>
-        <filter id="neon-glow-dark" x="-50%" y="-50%" width="200%" height="200%">
+        <filter :id="filterId" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur in="SourceAlpha" :stdDeviation="isHovered ? 4 : 2" result="blur" />
           <feFlood flood-color="#00FFC2" flood-opacity="0.8" result="color" />
           <feComposite in="color" in2="blur" operator="in" result="glow" />
@@ -26,7 +26,7 @@
         </filter>
 
         <!-- Ventana de visualización para el efecto scroll -->
-        <clipPath id="logo-mask-dark">
+        <clipPath :id="maskId">
           <rect x="110" y="0" width="250" height="120" />
         </clipPath>
       </defs>
@@ -39,11 +39,11 @@
         stroke-width="10" 
         stroke-linecap="round" 
         stroke-linejoin="round"
-        filter="url(#neon-glow-dark)"
+        :filter="`url(#${filterId})`"
       />
 
       <!-- Grupo con Clip-Path para el efecto scroll -->
-      <g clip-path="url(#logo-mask-dark)">
+      <g :clip-path="`url(#${maskId})`">
         <!-- CAPA ESTÁTICA: REPOSO (Alineación Técnica 121) -->
         <text 
           v-if="!isHovered"
@@ -89,7 +89,7 @@
         stroke="#00FFC2" 
         stroke-width="10" 
         stroke-linecap="round"
-        filter="url(#neon-glow-dark)"
+        :filter="`url(#${filterId})`"
       />
 
       <path 
@@ -100,7 +100,7 @@
         stroke-width="10" 
         stroke-linecap="round" 
         stroke-linejoin="round"
-        filter="url(#neon-glow-dark)"
+        :filter="`url(#${filterId})`"
       />
     </svg>
 
@@ -134,6 +134,10 @@ const slash = ref<SVGLineElement | null>(null);
 const textGroup = ref<SVGGElement | null>(null);
 const subtitle = ref<HTMLElement | null>(null);
 const scanline = ref<HTMLElement | null>(null);
+
+const instanceId = Math.random().toString(36).substring(2, 9);
+const maskId = computed(() => `logo-mask-dark-${instanceId}`);
+const filterId = computed(() => `neon-glow-dark-${instanceId}`);
 
 const textStyle = computed(() => ({
   fontFamily: '\"Aptos Display\", \"Aptos\", \"Inter\", sans-serif',

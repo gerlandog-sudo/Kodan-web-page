@@ -6,7 +6,13 @@ import kodanEnginePlugin from './vite-plugin-kodan.js'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    vue(),
+    vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: (tag) => tag.startsWith('Tres') && tag !== 'TresCanvas'
+        }
+      }
+    }),
     kodanEnginePlugin({ contentPath: './src/data/content.json' })
   ],
   resolve: {

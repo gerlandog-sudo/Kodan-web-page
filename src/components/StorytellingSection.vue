@@ -15,26 +15,36 @@
       <img src="/kodan_ghost_bg.png" alt="Digital Silk Genesis" />
     </div>
 
-    <!-- Terminal Pulse: Flujo de Datos Lateral -->
+    <!-- Terminal Pulse: Flujo de Datos Lateral (Restaurado a la izquierda) -->
     <div class="terminal-pulse">
-      <div class="pulse-line" v-for="n in 5" :key="n">
-        <code>{{ codeSnippets[n-1] }}</code>
+      <div class="pulse-line" v-for="n in 6" :key="n">
+        <code>{{ codeSnippets[(n-1) % codeSnippets.length] }}</code>
       </div>
     </div>
 
     <div class="content-wrapper">
-      <!-- Titular GSAP Reveal -->
-      <h2 class="title-reveal" ref="titleRef">Unraveling the Invisible.</h2>
+      <!-- Headline con Efecto de Escaneo Técnico (Tamaño Optimizado) -->
+      <div class="headline-container">
+        <h2 class="title-reveal" ref="titleRef">
+          La arquitectura de lo invisible: donde la precisión técnica se encuentra con la visión de negocio.
+        </h2>
+        <div class="scanline" ref="scanlineRef"></div>
+      </div>
 
-      <!-- Manifiesto Scrollytelling con Text Splitting -->
+      <!-- Manifiesto con Animación de Surgimiento (Words Stagger) -->
       <p class="manifesto-text" ref="manifestoRef">
         <span 
           v-for="(word, index) in manifestoWords" 
           :key="index"
           class="word"
-          :class="{ 'keyword': isKeyword(word) }"
         >
-          {{ word }}&nbsp;
+          <template v-if="word.includes('<kodan/>')">
+            <span class="bracket">&lt;</span><span class="brand-name">kodan</span><span class="bracket">/&gt;</span>{{ word.replace('<kodan/>', '') }}
+          </template>
+          <template v-else>
+            {{ word }}
+          </template>
+          &nbsp;
         </span>
       </p>
     </div>
@@ -50,82 +60,90 @@ gsap.registerPlugin(ScrollTrigger);
 
 const sectionRef = ref(null);
 const titleRef = ref(null);
+const scanlineRef = ref(null);
 const manifestoRef = ref(null);
 
 const mouseX = ref(0);
 const mouseY = ref(0);
 const parallaxY = ref(0);
 
-const text = "Más allá de la sintaxis, existe una arquitectura que respira. En el silencio de los sistemas legados, detectamos los nudos técnicos que otros ignoran. No solo refactorizamos código; sintetizamos seda digital desde el abismo de la complejidad. Operamos en la frontera donde el desarrollo a medida se encuentra con la preservación del legado, transformando cajas negras en infraestructuras líquidas y escalables. El futuro no se construye, se teje con precisión quirúrgica.";
-const manifestoWords = text.split(' ');
-
-const keywords = ['legados', 'seda', 'abismo', 'precisión', 'líquidas', 'sintetizamos'];
+const fullText = "En <kodan/>, no simplemente escribimos código; diseñamos ecosistemas digitales bajo una filosofía de sintaxis reactiva. Creemos que un software excepcional no es aquel que solo funciona, sino aquel que está construido con la economía de recursos y la elegancia estructural de una pieza de ingeniería de precisión. Integramos agilidad y pensamiento sistémico para transformar problemas complejos en interfaces intuitivas y arquitecturas escalables. No buscamos ser un proveedor masivo, sino el aliado estratégico para quienes entienden que, en el desarrollo boutique, la excelencia técnica es la única métrica que garantiza la trascendencia.";
+const manifestoWords = fullText.split(' ');
 
 const codeSnippets = [
-  "const logo = ref(null);",
-  "gsap.to(logo.value, { scale: 0.75 });",
-  "ScrollTrigger.create({ scrub: true });",
-  "// System synchronized.",
-  "returnAnim = gsap.to(text, { x: 0 });"
+  "const architecture = 'invisible';",
+  "gsap.to(system, { precision: 1.0 });",
+  "// Boutique Development Protocol",
+  "interface ScalableEcosystem { ... }",
+  "return excellence.guarantee();",
+  "sys.analyze(legacy_codebase);"
 ];
 
-const isKeyword = (word) => {
-  const cleanWord = word.toLowerCase().replace(/[,.;]/g, '');
-  return keywords.includes(cleanWord);
+const handleMouseMove = (e) => {
+  if (!sectionRef.value) return;
+  const rect = sectionRef.value.getBoundingClientRect();
+  const x = e.touches ? e.touches[0].clientX : e.clientX;
+  const y = e.touches ? e.touches[0].clientY : e.clientY;
+  mouseX.value = x - rect.left;
+  mouseY.value = y - rect.top;
 };
 
-const handleMouseMove = (e) => {
-  const rect = sectionRef.value.getBoundingClientRect();
-  mouseX.value = e.clientX - rect.left;
-  mouseY.value = e.clientY - rect.top;
-};
+let headlineTL = null;
+let manifestoAnim = null;
 
 onMounted(() => {
   window.addEventListener('mousemove', handleMouseMove);
+  window.addEventListener('touchmove', handleMouseMove, { passive: true });
 
-  const words = manifestoRef.value.querySelectorAll('.word');
-
-  // 1. Reveal del Titular
-  const titleAnim = gsap.from(titleRef.value, {
+  // 1. Animación del Headline (Scanline + Gradient Reveal)
+  headlineTL = gsap.timeline({
     scrollTrigger: {
       trigger: titleRef.value,
+      start: "top 85%",
+      toggleActions: "play none none none"
+    }
+  });
+
+  headlineTL.fromTo(scanlineRef.value, 
+    { left: "-15%" },
+    { left: "115%", duration: 2, ease: "power2.inOut" }
+  );
+
+  headlineTL.fromTo(titleRef.value,
+    { backgroundPosition: "100% 0%", opacity: 0.3 },
+    { backgroundPosition: "0% 0%", opacity: 1, duration: 2, ease: "power2.inOut" },
+    "<"
+  );
+
+  // 2. Animación del Manifiesto (Staggered Word Reveal - "Lo que estaba muy bueno")
+  const words = manifestoRef.value.querySelectorAll('.word');
+  manifestoAnim = gsap.from(words, {
+    scrollTrigger: {
+      trigger: manifestoRef.value,
       start: "top 80%",
       toggleActions: "play none none none"
     },
     opacity: 0,
-    y: 50,
+    filter: "blur(15px)",
+    y: 20,
+    stagger: 0.02,
     duration: 1.2,
-    ease: "power4.out"
-  });
-
-  // 2. Animación del Manifiesto
-  const manifestoAnim = gsap.from(words, {
-    scrollTrigger: {
-      trigger: manifestoRef.value,
-      start: "top 70%",
-      toggleActions: "play none none none"
-    },
-    opacity: 0,
-    filter: "blur(20px)",
-    stagger: 0.05,
-    duration: 0.8,
     ease: "power2.out"
   });
 
-  // 3. Reset Lógico al alcanzar el tope (Hero)
+  // 3. Reset Lógico para Re-entrada
   ScrollTrigger.create({
     trigger: "body",
     start: "top top",
     onToggle: (self) => {
       if (self.isActive) {
-        // Al volver al tope absoluto, reseteamos ambas animaciones para permitir re-revelado
-        titleAnim.pause(0);
-        manifestoAnim.pause(0);
+        if (headlineTL) headlineTL.pause(0);
+        if (manifestoAnim) manifestoAnim.pause(0);
       }
     }
   });
 
-  // 4. Parallax sutil del Ghost Background
+  // 4. Parallax del Fondo
   ScrollTrigger.create({
     trigger: sectionRef.value,
     start: "top bottom",
@@ -139,6 +157,8 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('mousemove', handleMouseMove);
+  window.removeEventListener('touchmove', handleMouseMove);
+  ScrollTrigger.getAll().forEach(t => t.kill());
 });
 </script>
 
@@ -152,6 +172,7 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: flex-end;
 }
 
 .grain-overlay {
@@ -167,15 +188,15 @@ onUnmounted(() => {
   position: absolute;
   inset: -10% -5%;
   z-index: 1;
-  opacity: 0.4;
+  opacity: 0.45; /* Aumentado para mayor presencia */
   pointer-events: none;
   -webkit-mask-image: radial-gradient(
-    circle 300px at var(--mask-x) var(--mask-y),
+    circle 400px at var(--mask-x) var(--mask-y),
     black 0%,
     transparent 100%
   );
   mask-image: radial-gradient(
-    circle 300px at var(--mask-x) var(--mask-y),
+    circle 400px at var(--mask-x) var(--mask-y),
     black 0%,
     transparent 100%
   );
@@ -185,28 +206,29 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(1) brightness(0.6);
+  filter: grayscale(1) brightness(0.4);
 }
 
 .terminal-pulse {
   position: absolute;
-  left: 2rem;
+  left: 2rem; /* Vuelve a la izquierda */
   top: 0;
   bottom: 0;
-  width: 200px;
-  opacity: 0.15;
-  font-family: monospace;
-  font-size: 0.7rem;
+  width: 250px;
+  opacity: 0.35; /* Aumentado para mayor visibilidad */
+  font-family: 'Fira Code', monospace;
+  font-size: 0.65rem;
   color: var(--color-mint);
+  text-shadow: 0 0 10px rgba(0, 255, 194, 0.4); /* Sutil resplandor técnico */
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
   z-index: 2;
   pointer-events: none;
 }
 
 .pulse-line {
-  animation: scrollData 20s linear infinite;
+  animation: scrollData 25s linear infinite;
 }
 
 @keyframes scrollData {
@@ -217,35 +239,77 @@ onUnmounted(() => {
 .content-wrapper {
   position: relative;
   z-index: 10;
-  max-width: 900px;
+  max-width: 1000px; /* Aumentado ligeramente para ayudar al flujo */
+  text-align: right;
+}
+
+.headline-container {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 4rem;
+  display: inline-block;
+  text-align: right;
 }
 
 .title-reveal {
-  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-size: clamp(1.25rem, 2.8vw, 1.98rem); /* Reducción final para 2 líneas */
+  line-height: 1.2;
   font-weight: 900;
-  margin-bottom: 3rem;
   color: var(--text-h);
+  letter-spacing: -0.02em;
+  
+  /* Efecto Gradiente Técnico */
+  background: linear-gradient(90deg, 
+    #FFFFFF 0%, 
+    #FFFFFF 48%, 
+    rgba(255, 255, 255, 0.2) 52%, 
+    rgba(255, 255, 255, 0.2) 100%);
+  background-size: 200% 100%;
+  background-position: 100% 0%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: block;
+}
+
+.scanline {
+  position: absolute;
+  top: 0;
+  left: -15%;
+  width: 20%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 194, 0.3), transparent);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .manifesto-text {
-  font-size: clamp(1.1rem, 1.8vw, 1.4rem);
-  line-height: 1.6;
-  color: #888888;
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  line-height: 1.8; /* Aumentado para legibilidad */
+  color: var(--text-body);
   font-weight: 300;
+  max-width: 800px;
+  text-wrap: balance;
+  margin-left: auto;
+  letter-spacing: 0.01em; /* Ajuste fino técnico */
 }
 
 .word {
   display: inline-block;
-  transition: color 0.3s ease;
 }
 
-.keyword {
-  color: #00E5E5;
+.bracket {
+  color: var(--color-mint);
   font-weight: 500;
-  cursor: help;
 }
 
-.keyword:hover {
-  text-shadow: 0 0 15px rgba(0, 229, 225, 0.6);
+.brand-name {
+  color: #FFFFFF;
+  font-weight: 300;
+}
+
+@media (max-width: 768px) {
+  .storytelling-container {
+    padding: 6rem 5%;
+  }
 }
 </style>

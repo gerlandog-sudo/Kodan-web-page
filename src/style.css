@@ -37,13 +37,14 @@
   box-sizing: border-box;
 }
 
-body {
+html, body {
   background: var(--bg-global) no-repeat;
   background-attachment: fixed;
   color: var(--text-body);
   font-family: 'Liberation Sans', 'Inter', system-ui, sans-serif;
   transition: color 0.3s ease;
   min-height: 100vh;
+  line-height: 1.6;
 }
 
 h1, h2, h3, h4 {
@@ -122,4 +123,76 @@ h1, h2, h3, h4 {
 .tech-data {
   color: rgba(0, 255, 194, 0.8);
   font-family: monospace;
+}
+/* 6. Efecto Mecha KODAN (Contact Buttons) */
+.fuse-button {
+  --fuse-color: var(--color-mint);
+  --fuse-angle: 0deg;
+  position: relative;
+  border: 1px solid var(--fuse-color);
+  border-radius: 4px; /* Redondeado extremadamente sutil */
+  background: rgba(0, 255, 194, 0.03);
+  color: var(--fuse-color);
+  font-family: monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 1.2rem 2.5rem;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  overflow: visible; /* Permitir brillo de la mecha */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
+
+/* El orbe de la mecha (la chispa) */
+.fuse-button::after {
+  content: '';
+  position: absolute;
+  inset: -2px; /* Un poco más afuera para que se vea bien el borde */
+  padding: 3px; /* Más grueso */
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--fuse-angle),
+    #fff 0%,
+    var(--color-mint) 4%,
+    rgba(0, 255, 194, 0.8) 12%,
+    rgba(0, 255, 194, 0.3) 25%,
+    transparent 40%,
+    transparent 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  pointer-events: none;
+  filter: drop-shadow(0 0 10px var(--color-mint)) drop-shadow(0 0 20px var(--color-mint));
+}
+
+.fuse-button.is-firing::after {
+  opacity: 1;
+}
+
+/* Estado post-animación: Tono más claro */
+.fuse-button.is-consumed {
+  --fuse-color: #E0FFF8; /* Tono casi blanco pero con esencia mint */
+  border-color: var(--fuse-color);
+  color: var(--fuse-color);
+  box-shadow: 0 0 25px rgba(224, 255, 248, 0.2);
+  background: rgba(224, 255, 248, 0.05);
+  animation: fuse-finish-flash 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes fuse-finish-flash {
+  0% { transform: scale(1); filter: brightness(1); }
+  40% { transform: scale(1.02); filter: brightness(1.8); box-shadow: 0 0 40px var(--color-mint); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+.fuse-button:hover:not(.is-firing) {
+  background: rgba(0, 255, 194, 0.05);
+  box-shadow: 0 0 20px rgba(0, 255, 194, 0.1);
 }

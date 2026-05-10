@@ -1,16 +1,47 @@
 <template>
-  <section class="parallax-container" ref="parallaxContainer">
-    <!-- Capa de Fondo (La Imagen) -->
-    <div class="parallax-bg" ref="parallaxBg">
-      <img :src="bgImage" alt="Background" class="bg-image">
-      <div class="overlay"></div>
+  <section class="parallax-wrapper" ref="wrapper">
+    <!-- CAPA 0: FONDO (MICRO-ARQUITECTURA) -->
+    <div class="layer-bg" ref="bgLayer">
+      <div class="bg-overlay"></div>
+      <img src="@/assets/parallax_bg.png" alt="Micro-Architecture" class="parallax-img">
     </div>
 
-    <!-- Capa de Frente (El Texto) -->
-    <div class="parallax-content" ref="parallaxText">
-      <h2 class="tech-data">{{ title }}</h2>
-      <p class="parallax-slogan">{{ subtitle }}</p>
-      <button class="btn-mint neon-shadow">{{ buttonText }}</button>
+    <!-- CAPA 1: DATOS FLOTANTES -->
+    <div class="layer-content" ref="contentLayer">
+      <div class="floating-grid">
+        <!-- Bloque Lateral Izquierdo: Modelos -->
+        <div class="data-card left" ref="cardLeft">
+          <span class="tech-tag">ARCH_MODELS</span>
+          <h3>Modelos y Arquitectura</h3>
+          <p>Microservicios desacoplados y Clean Architecture como estándar. Diseñamos sistemas preparados para la evolución constante.</p>
+        </div>
+
+        <!-- Bloque Central: Headline -->
+        <div class="headline-container" ref="headline">
+          <h2 class="main-title">Ingeniería de vanguardia, <span class="highlight">ejecutada con rigor.</span></h2>
+        </div>
+
+        <!-- Bloque Lateral Derecho: Stack -->
+        <div class="data-card right" ref="cardRight">
+          <span class="tech-tag">PERFORMANCE_STACK</span>
+          <h3>Stack & Performance</h3>
+          <p>Dominio en ecosistemas Reactivos y Cloud-Native. Optimizamos cada línea de código para lograr latencias mínimas y escalabilidad infinita.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAPA 2: FOOTER DE SECCIÓN (INVITACIÓN) -->
+    <div class="section-footer" ref="footerLayer">
+      <div class="footer-content">
+        <p class="footer-text">La complejidad técnica es nuestra materia prima.</p>
+        <button 
+          class="fuse-button neon-shadow" 
+          @click="handleFuseClick"
+          ref="fuseBtn"
+        >
+          Hablemos de su próximo desafío
+        </button>
+      </div>
     </div>
   </section>
 </template>
@@ -20,123 +51,252 @@ import { onMounted, ref } from 'vue';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-const props = defineProps({
-  bgImage: { type: String, default: '/src/assets/fondo.jpg' },
-  title: { type: String, default: 'Modernización Disruptiva' },
-  subtitle: { type: String, default: 'Transformamos sistemas legados en arquitecturas de alto rendimiento.' },
-  buttonText: { type: String, default: 'Iniciar Consultoría' }
-});
-
-defineOptions({
-  cmsConfig: {
-    label: 'Parallax Section',
-    icon: 'image',
-    fields: {
-      bgImage: 'string',
-      title: 'string',
-      subtitle: 'string',
-      buttonText: 'string'
-    }
-  }
-});
-
 gsap.registerPlugin(ScrollTrigger);
 
-const parallaxContainer = ref(null);
-const parallaxBg = ref(null);
-const parallaxText = ref(null);
+const wrapper = ref(null);
+const bgLayer = ref(null);
+const contentLayer = ref(null);
+const headline = ref(null);
+const cardLeft = ref(null);
+const cardRight = ref(null);
+const footerLayer = ref(null);
+const fuseBtn = ref(null);
+
+const handleFuseClick = () => {
+  const btn = fuseBtn.value;
+  if (!btn || btn.classList.contains('is-firing')) return;
+
+  // Reset para permitir re-disparo si ya estaba consumido
+  btn.classList.remove('is-consumed');
+  btn.classList.add('is-firing');
+  gsap.set(btn, { '--fuse-angle': '0deg' });
+  
+  // Animación de la "mecha" recorriendo el borde
+  gsap.to(btn, {
+    '--fuse-angle': '360deg',
+    duration: 1.5,
+    ease: "power2.inOut",
+    onComplete: () => {
+      btn.classList.remove('is-firing');
+      btn.classList.add('is-consumed');
+    }
+  });
+};
 
 onMounted(() => {
-  // Efecto Parallax: La imagen se mueve más lento (y)
-  gsap.to(parallaxBg.value, {
+  // Movimiento de Fondo (Aumentado para mayor profundidad)
+  gsap.to(bgLayer.value, {
     scrollTrigger: {
-      trigger: parallaxContainer.value,
+      trigger: wrapper.value,
       start: "top bottom",
       end: "bottom top",
       scrub: true
     },
-    y: "20%", // Se desplaza hacia abajo mientras scrolleamos
+    y: "35%",
+    scale: 1.2,
     ease: "none"
   });
 
-  // Efecto Parallax: El texto se mueve más rápido hacia arriba
-  gsap.to(parallaxText.value, {
+  // Movimiento de Contenido (Inversión fuerte para efecto 3D)
+  gsap.to(contentLayer.value, {
     scrollTrigger: {
-      trigger: parallaxContainer.value,
+      trigger: wrapper.value,
       start: "top bottom",
       end: "bottom top",
-      scrub: 1 // Suavizado
+      scrub: 1.2
     },
-    y: "-50px", 
-    opacity: 1,
-    ease: "power1.out"
+    y: "-300px",
+    ease: "power1.inOut"
+  });
+
+  // Animaciones de los bloques laterales (Sutil inclinación/float)
+  const tlCards = gsap.timeline({
+    scrollTrigger: {
+      trigger: wrapper.value,
+      start: "top center",
+      end: "bottom center",
+      scrub: 2
+    }
+  });
+
+  tlCards.from(cardLeft.value, { x: -50, opacity: 0.5, rotateY: 10 }, 0);
+  tlCards.from(cardRight.value, { x: 50, opacity: 0.5, rotateY: -10 }, 0);
+
+  // Revelado del Footer
+  gsap.from(footerLayer.value, {
+    scrollTrigger: {
+      trigger: footerLayer.value,
+      start: "top 90%",
+      toggleActions: "play none none reverse"
+    },
+    y: 30,
+    opacity: 0,
+    duration: 1,
+    ease: "expo.out"
   });
 });
 </script>
 
 <style scoped>
-.parallax-container {
+.parallax-wrapper {
   position: relative;
-  height: 80vh;
   width: 100%;
+  min-height: 150vh; /* Aumentado para mayor recorrido parallax */
   overflow: hidden;
+  background: #000;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  margin: 4rem 0;
-  border-radius: 12px;
-  background: var(--bg-global);
+  padding: 15vh 5vw;
+  perspective: 2000px; /* Profundidad global */
 }
 
-.parallax-bg {
+/* CAPA 0: BACKGROUND */
+.layer-bg {
   position: absolute;
-  top: -20%; /* Margen para el movimiento */
+  top: -10%;
   left: 0;
   width: 100%;
-  height: 140%;
+  height: 120%;
   z-index: 1;
 }
 
-.bg-image {
+.parallax-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: brightness(0.4) saturate(1.2);
+  filter: brightness(0.3) contrast(1.1);
 }
 
-.overlay {
+.bg-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, var(--bg-global), transparent 20%, transparent 80%, var(--bg-global));
-}
-
-.parallax-content {
-  position: relative;
+  background: linear-gradient(to bottom, 
+    #000 0%, 
+    transparent 20%, 
+    transparent 80%, 
+    #000 100%
+  );
   z-index: 2;
-  text-align: center;
-  max-width: 800px;
-  padding: 2rem;
-  opacity: 0.8; /* Empezamos un poco menos opacos para la animación */
 }
 
-.parallax-content h2 {
-  font-size: 4rem;
+/* CAPA 1: CONTENT */
+.layer-content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.floating-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+/* Headline Central */
+.headline-container {
+  text-align: center;
+  perspective: 1000px;
+}
+
+.main-title {
+  font-size: clamp(1.9rem, 3.8vw, 3.4rem); /* Reducido 10% extra */
   font-weight: 900;
-  color: var(--color-mint);
-  margin-bottom: 1rem;
+  line-height: 1.1;
+  color: #fff;
   text-transform: uppercase;
   letter-spacing: -2px;
 }
 
-.parallax-slogan {
-  font-size: 1.5rem;
-  color: var(--text-h);
+.highlight {
+  color: var(--color-mint);
+  display: block;
+}
+
+/* Data Cards Laterales */
+.data-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2.2rem; /* Aumentado 10% */
+  border-radius: 4px; 
+  transition: border-color 0.4s ease;
+}
+
+.data-card:hover {
+  border-color: var(--color-mint);
+}
+
+.tech-tag {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.77rem; /* Aumentado 10% */
+  color: var(--color-mint);
+  letter-spacing: 2px;
+  display: block;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.data-card h3 {
+  font-size: 1.32rem; /* Aumentado 10% */
+  color: #fff;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.data-card p {
+  font-size: 1.05rem; /* Aumentado ~10% */
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* CAPA 2: FOOTER */
+.section-footer {
+  position: relative;
+  z-index: 4;
+  margin-top: 15vh;
+  text-align: center;
+}
+
+.footer-text {
+  font-family: 'Courier New', Courier, monospace;
+  color: var(--color-mint);
+  font-size: 1.1rem;
   margin-bottom: 2rem;
-  line-height: 1.4;
+}
+
+.fuse-button {
+  margin-top: 2rem;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1100px) {
+  .floating-grid {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+  
+  .headline-container {
+    order: -1;
+  }
+
+  .data-card {
+    max-width: 500px;
+    margin: 0 auto;
+  }
 }
 
 @media (max-width: 768px) {
-  .parallax-content h2 { font-size: 2.5rem; }
-  .parallax-slogan { font-size: 1.1rem; }
+  .main-title {
+    font-size: 2.5rem;
+  }
+  
+  .parallax-wrapper {
+    padding: 5vh 5vw;
+  }
 }
 </style>

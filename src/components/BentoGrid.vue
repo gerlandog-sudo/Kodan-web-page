@@ -48,12 +48,12 @@ onMounted(() => {
 });
 
 const bentoItems = [
-  { title: "AI Integration", size: "large", desc: "Sistemas cognitivos de alta precisión." },
-  { title: "Legacy", size: "small", desc: "Modernización sin fricción." },
-  { title: "Cloud Ops", size: "medium", desc: "Infraestructura elástica." },
+  { title: "Integración IA", size: "large", desc: "Sistemas cognitivos de alta precisión." },
+  { title: "Sistemas Legacy", size: "small", desc: "Modernización sin fricción." },
+  { title: "Operaciones Cloud", size: "medium", desc: "Infraestructura elástica." },
   { title: "UI/UX", size: "medium", desc: "Interfaces disruptivas." },
-  { title: "Security", size: "small", desc: "Protocolos de grado militar." },
-  { title: "Optimization", size: "large", desc: "Refactorización de alto rendimiento." },
+  { title: "Seguridad", size: "small", desc: "Protocolos de grado militar." },
+  { title: "Optimización", size: "large", desc: "Refactorización de alto rendimiento." },
 ];
 </script>
 
@@ -68,7 +68,7 @@ const bentoItems = [
         :class="item.size"
       >
         <div class="card-content">
-          <span class="card-tag">Service // 0{{ index + 1 }}</span>
+          <span class="card-tag">Servicio // 0{{ index + 1 }}</span>
           <h3>{{ item.title }}</h3>
           <p>{{ item.desc }}</p>
         </div>

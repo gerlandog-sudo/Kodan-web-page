@@ -3,15 +3,47 @@ import { onMounted, ref } from 'vue';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextPlugin } from 'gsap/TextPlugin';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
-gsap.registerPlugin(ScrollTrigger, TextPlugin);
+gsap.registerPlugin(ScrollTrigger, TextPlugin, ScrollToPlugin);
 
 const sectionRef = ref<HTMLElement | null>(null);
 const lifelineRef = ref<HTMLElement | null>(null);
 const terminalRefs = ref<HTMLElement[]>([]);
 
+const scrollToShowcase = (name: string) => {
+  const label = `project-${name.toLowerCase().replace(/\s+/g, '')}`;
+  // Encontrar el ScrollTrigger del DesignShowcase
+  const st = ScrollTrigger.getAll().find(s => s.trigger && (s.trigger as HTMLElement).classList.contains('showcase-section'));
+  
+  if (st) {
+    const scrollPos = st.labelToScroll(label);
+    gsap.to(window, {
+      duration: 2,
+      scrollTo: {
+        y: scrollPos - 2,
+        autoKill: true
+      },
+      ease: "power3.inOut"
+    });
+  } else {
+    // Fallback si no se encuentra el ST (aunque debería estar)
+    const targetId = `#showcase-${name.toLowerCase().replace(/\s+/g, '')}`;
+    const target = document.querySelector(targetId);
+    if (target) {
+      gsap.to(window, {
+        duration: 2,
+        scrollTo: { y: target, autoKill: true },
+        ease: "power3.inOut"
+      });
+    }
+  }
+};
+
 const setTerminalRef = (el: any) => {
-  if (el) terminalRefs.value.push(el);
+  if (el && !terminalRefs.value.includes(el)) {
+    terminalRefs.value.push(el);
+  }
 };
 
 onMounted(() => {
@@ -32,26 +64,29 @@ onMounted(() => {
   // 2. Terminal Typewriter Effect
   terminalRefs.value.forEach((el, index) => {
     const text = el.getAttribute('data-text') || "";
-    el.innerText = ""; // Limpiar para el efecto
-
-    gsap.to(el, {
-      duration: 2,
-      text: text,
-      scrollTrigger: {
-        trigger: el,
-        start: "top 80%",
-        toggleActions: "play none none none"
-      },
-      delay: index * 0.2
-    });
+    
+    gsap.fromTo(el, 
+      { text: "" },
+      {
+        duration: 1.5,
+        text: text,
+        ease: "none",
+        scrollTrigger: {
+          trigger: el,
+          start: "top 90%",
+          toggleActions: "play none none none"
+        },
+        delay: index * 0.1
+      }
+    );
   });
 });
 
 const milestones = [
-  { year: "2024", title: "KODAN Protocol V1", desc: "Despliegue de arquitectura escalable." },
-  { year: "2023", title: "Legacy Forge", desc: "Refactorización de sistemas críticos." },
-  { year: "2022", title: "Digital Silk Foundation", desc: "Lanzamiento del motor visual." },
-  { year: "2021", title: "Quantum Genesis", desc: "Investigación en algoritmos adaptativos." },
+  { year: "2026", title: "SmartCook", desc: "Inteligencia Visual Multimodal. Motor de Visión Computacional que decodifica heladeras, alacenas y capturas múltiples para transformar cualquier inventario visual en una experiencia gastronómica de precisión." },
+  { year: "2025", title: "TimeTracker Mobile", desc: "La extensión móvil de TimeTracker traslada la complejidad de nuestra arquitectura de datos a una interfaz de alta fidelidad. Diseñada para una interacción de baja fricción, permite el monitoreo de KPIs críticos y la validación de desvíos operativos." },
+  { year: "2025", title: "TimeTracker", desc: "Observabilidad de Recursos y Data Intelligence. Arquitectura multi-tenant diseñada para la analítica predictiva de costos y la optimización granular de capital humano." },
+  { year: "2023", title: "SimpleID", desc: "Inmutabilidad y Criptografía Aplicada. Protocolos de identidad descentralizada (DLT) con integración de biometría avanzada para la seguridad en el borde de la red." },
 ];
 </script>
 
@@ -61,8 +96,8 @@ const milestones = [
 
     <div class="masterclass-content">
       <header class="masterclass-header">
-        <span class="mono-tag">Core Technical / Masterclass</span>
-        <h2>El Núcleo Técnico</h2>
+        <span class="mono-tag">Trazabilidad de Ingeniería</span>
+        <h2>Un registro de soluciones críticas y arquitecturas escalables.</h2>
       </header>
 
       <div class="milestones-list">
@@ -70,7 +105,12 @@ const milestones = [
           <div class="milestone-marker"></div>
           <div class="milestone-body">
             <span class="milestone-year">{{ milestone.year }}</span>
-            <h3 :ref="setTerminalRef" :data-text="milestone.title" class="mono-title">_</h3>
+            <h3 
+              :ref="setTerminalRef" 
+              :data-text="milestone.title" 
+              class="mono-title clickable"
+              @click="scrollToShowcase(milestone.title)"
+            >_</h3>
             <p>{{ milestone.desc }}</p>
           </div>
         </div>
@@ -89,7 +129,7 @@ const milestones = [
 
 .platinum-lifeline {
   position: absolute;
-  left: 5vw;
+  right: 5vw;
   top: 10rem;
   width: 2px;
   height: 0%;
@@ -99,9 +139,10 @@ const milestones = [
 }
 
 .masterclass-content {
-  padding-left: 5vw;
+  padding-right: 5vw;
   position: relative;
   z-index: 2;
+  text-align: right;
 }
 
 .masterclass-header {
@@ -109,22 +150,31 @@ const milestones = [
 }
 
 .mono-tag {
-  font-family: 'JetBrains Mono', 'Courier New', monospace;
-  color: var(--color-mint);
-  letter-spacing: 2px;
-  font-size: 0.9rem;
+  font-size: clamp(1.9rem, 3.8vw, 3.4rem);
+  font-weight: 900;
+  line-height: 1.1;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: -2px;
+  display: block;
+  margin-bottom: 1rem;
 }
 
 h2 {
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  font-weight: 300;
-  margin-top: 1rem;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.77rem;
+  color: var(--color-mint);
+  letter-spacing: 2px;
+  display: block;
+  margin-bottom: 6rem;
+  opacity: 0.7;
+  text-transform: uppercase;
 }
 
 .milestones-list {
   display: flex;
   flex-direction: column;
-  gap: 8rem;
+  gap: 4rem;
 }
 
 .milestone-item {
@@ -132,6 +182,7 @@ h2 {
   display: flex;
   gap: 3rem;
   align-items: flex-start;
+  flex-direction: row-reverse;
 }
 
 .milestone-marker {
@@ -142,6 +193,13 @@ h2 {
   margin-top: 0.8rem;
   box-shadow: 0 0 10px #BFC1C2;
   flex-shrink: 0;
+}
+
+.milestone-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* Alineación a la derecha como el resto de la sección */
+  text-align: right;
 }
 
 .milestone-year {
@@ -158,15 +216,26 @@ h2 {
   margin: 0.5rem 0;
 }
 
+.mono-title.clickable {
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.mono-title.clickable:hover {
+  color: var(--color-mint);
+  transform: translateX(-10px);
+}
+
 p {
   color: var(--text-body);
   max-width: 400px;
   line-height: 1.6;
+  margin-left: auto;
 }
 
 @media (max-width: 768px) {
   .masterclass-container { padding: 5rem 5vw; }
-  .platinum-lifeline { left: 20px; }
-  .masterclass-content { padding-left: 30px; }
+  .platinum-lifeline { right: 20px; }
+  .masterclass-content { padding-right: 30px; }
 }
 </style>

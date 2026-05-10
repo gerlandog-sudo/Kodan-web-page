@@ -4,9 +4,15 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import KodanLogoDark from './components/kodanLogoDark.vue';
 import StorytellingSection from './components/StorytellingSection.vue';
+import ParallaxSection from './components/ParallaxSection.vue';
 import MasterclassSection from './components/MasterclassSection.vue';
-import ColorConfigurator from './components/ColorConfigurator.vue';
+import DesignShowcase from './components/DesignShowcase.vue';
+import CylinderShowcase from './components/CylinderShowcase.vue';
+import ContactFooter from './components/ContactFooter.vue';
+import ContactSystem from './components/ContactSystem.vue';
 import NotificationSystem from './components/NotificationSystem.vue';
+import PreLoader from './components/PreLoader.vue';
+import VerticalProgress from './components/VerticalProgress.vue';
 import { useNotificationStore } from './stores/notificationStore';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -14,6 +20,15 @@ gsap.registerPlugin(ScrollTrigger);
 const notificationStore = useNotificationStore();
 const logoWrapper = ref(null);
 const scrollPrompt = ref(null);
+const isLoaded = ref(false);
+
+const handleLoaded = () => {
+  isLoaded.value = true;
+  // Refrescar ScrollTrigger después de que el DOM sea visible y el preloader se retire
+  setTimeout(() => {
+    ScrollTrigger.refresh();
+  }, 100);
+};
 
 onMounted(() => {
   // 1. Estado Inicial Absoluto (Control total GSAP)
@@ -59,7 +74,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <main class="app-container">
+  <PreLoader @loaded="handleLoaded" />
+  
+  <main class="app-container" :class="{ 'is-visible': isLoaded }">
+    <VerticalProgress v-if="isLoaded" />
+    
     <!-- Capa de Marca Dinámica (Persistente) -->
     <div ref="logoWrapper" class="logo-dynamic-wrapper">
       <KodanLogoDark :size="400" />
@@ -75,13 +94,25 @@ onMounted(() => {
       <!-- 2. Storytelling Section -->
       <StorytellingSection />
 
-      <!-- 3. Masterclass Section -->
+      <!-- 3. Parallax Section (Capa de Validación Técnica) -->
+      <ParallaxSection />
+
+      <!-- 4. Masterclass Section -->
       <MasterclassSection />
 
-      <!-- 4. Footer & Configurator -->
-      <ColorConfigurator />
+      <!-- 5. Design Showcase (Flat) -->
+      <DesignShowcase />
+
+      <!-- 6. Cylinder Showcase (3D Ring) -->
+      <CylinderShowcase />
+
+      <!-- 7. Footer Premium -->
+      <ContactFooter />
+
+      <!-- Espaciador Final removido para clavar el footer al fondo -->
     </div>
 
+    <ContactSystem />
     <NotificationSystem />
   </main>
 </template>
@@ -91,6 +122,12 @@ onMounted(() => {
   background: var(--bg-global);
   color: var(--text-body);
   min-height: 300vh;
+  opacity: 0;
+  transition: opacity 1s ease-out;
+}
+
+.app-container.is-visible {
+  opacity: 1;
 }
 
 .logo-dynamic-wrapper {
@@ -131,4 +168,6 @@ onMounted(() => {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
 }
+
+
 </style>

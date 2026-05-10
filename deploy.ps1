@@ -17,28 +17,10 @@ if (Test-Path $deployDir) {
 }
 New-Item -ItemType Directory -Path $deployDir
 
-# 4. Copiar Archivos Compilados (Frontend)
-Write-Host "Empaquetando Frontend..." -ForegroundColor Yellow
+# 4. Copiar Archivos Compilados (Frontend Únicamente)
+Write-Host "Empaquetando Plataforma..." -ForegroundColor Yellow
 Copy-Item -Path "dist/*" -Destination $deployDir -Recurse
 
-# 5. Copiar Backend (PHP)
-Write-Host "Empaquetando Backend..." -ForegroundColor Yellow
-New-Item -ItemType Directory -Path "$deployDir/api"
-Copy-Item -Path "api/*" -Destination "$deployDir/api" -Recurse
-
-# 6. Compilar y Empaquetar Sanity Studio
-Write-Host "Compilando Sanity Studio..." -ForegroundColor Yellow
-Set-Location studio
-npm run build
-Set-Location ..
-New-Item -ItemType Directory -Path "$deployDir/studio"
-Copy-Item -Path "studio/dist/*" -Destination "$deployDir/studio" -Recurse
-
-# 7. Copiar Migraciones (Solo si es necesario para el server)
-Write-Host "Empaquetando Migraciones..." -ForegroundColor Yellow
-New-Item -ItemType Directory -Path "$deployDir/migrations"
-Copy-Item -Path "migrations/*" -Destination "$deployDir/migrations" -Recurse
-
-# 7. Limpieza Final
+# 5. Limpieza Final
 Write-Host "Limpieza completada." -ForegroundColor Green
-Write-Host "El paquete está listo en: ./$deployDir" -ForegroundColor Cyan
+Write-Host "El paquete de la plataforma está listo en: ./$deployDir" -ForegroundColor Cyan
