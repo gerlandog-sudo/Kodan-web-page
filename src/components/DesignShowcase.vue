@@ -96,6 +96,12 @@ onMounted(() => {
 
 const projects = [
   { 
+    name: "kodanHUB", 
+    category: "Orquestación de APIs", 
+    description: "Hub agnóstico para la gestión centralizada de modelos de IA, control de tokens y conectividad empresarial de alta disponibilidad.",
+    img: "/kodanhub.png" 
+  },
+  { 
     name: "SmartCook", 
     category: "Inteligencia Culinaria IA", 
     description: "Visión Artificial Multimodal: De la heladera o la alacena al plato perfecto. Análisis inteligente de capturas múltiples para la orquestación culinaria sin fricciones.",
@@ -114,7 +120,7 @@ const projects = [
     img: "/timetracker.png"
   },
   { 
-    name: "SimpleID", 
+    name: "simpleID", 
     category: "Protocolo de Identidad", 
     description: "Soberanía digital mediante protocolos de identidad minimalistas.",
     img: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&q=80&w=1200" 

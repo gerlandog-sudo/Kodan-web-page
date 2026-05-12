@@ -12,27 +12,27 @@ const lifelineRef = ref<HTMLElement | null>(null);
 const terminalRefs = ref<HTMLElement[]>([]);
 
 const scrollToShowcase = (name: string) => {
-  const label = `project-${name.toLowerCase().replace(/\s+/g, '')}`;
-  // Encontrar el ScrollTrigger del DesignShowcase
-  const st = ScrollTrigger.getAll().find(s => s.trigger && (s.trigger as HTMLElement).classList.contains('showcase-section'));
+  const index = milestones.findIndex(m => m.title === name);
+  const st = ScrollTrigger.getById('cylinder-st');
   
-  if (st) {
-    const scrollPos = st.labelToScroll(label);
+  if (st && index !== -1) {
+    // Calculamos el punto exacto de scroll dentro del pin del cilindro
+    // Basado en la proporción del índice sobre el total de proyectos
+    const totalProjects = milestones.length;
+    const projectProgress = index / totalProjects;
+    const targetScroll = st.start + (projectProgress * (st.end - st.start));
+    
     gsap.to(window, {
       duration: 2,
-      scrollTo: {
-        y: scrollPos - 2,
-        autoKill: true
-      },
+      scrollTo: { y: targetScroll, autoKill: true },
       ease: "power3.inOut"
     });
   } else {
-    // Fallback si no se encuentra el ST (aunque debería estar)
-    const targetId = `#showcase-${name.toLowerCase().replace(/\s+/g, '')}`;
-    const target = document.querySelector(targetId);
+    // Fallback por si el ST no está listo
+    const target = document.querySelector('#cylinder-showcase-section');
     if (target) {
       gsap.to(window, {
-        duration: 2,
+        duration: 1.5,
         scrollTo: { y: target, autoKill: true },
         ease: "power3.inOut"
       });
@@ -83,10 +83,11 @@ onMounted(() => {
 });
 
 const milestones = [
+  { year: "2026", title: "kodanHUB", desc: "Orquestación Centralizada de APIs. Hub agnóstico para la gestión inteligente de modelos de IA, control de tokens y conectividad empresarial de alta disponibilidad." },
   { year: "2026", title: "SmartCook", desc: "Inteligencia Visual Multimodal. Motor de Visión Computacional que decodifica heladeras, alacenas y capturas múltiples para transformar cualquier inventario visual en una experiencia gastronómica de precisión." },
   { year: "2025", title: "TimeTracker Mobile", desc: "La extensión móvil de TimeTracker traslada la complejidad de nuestra arquitectura de datos a una interfaz de alta fidelidad. Diseñada para una interacción de baja fricción, permite el monitoreo de KPIs críticos y la validación de desvíos operativos." },
   { year: "2025", title: "TimeTracker", desc: "Observabilidad de Recursos y Data Intelligence. Arquitectura multi-tenant diseñada para la analítica predictiva de costos y la optimización granular de capital humano." },
-  { year: "2023", title: "SimpleID", desc: "Inmutabilidad y Criptografía Aplicada. Protocolos de identidad descentralizada (DLT) con integración de biometría avanzada para la seguridad en el borde de la red." },
+  { year: "2023", title: "simpleID", desc: "Inmutabilidad y Criptografía Aplicada. Protocolos de identidad descentralizada (DLT) con integración de biometría avanzada para la seguridad en el borde de la red." },
 ];
 </script>
 

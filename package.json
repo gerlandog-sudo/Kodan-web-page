@@ -1,7 +1,7 @@
 {
   "name": "kodan",
   "private": true,
-  "version": "0.0.68",
+  "version": "0.0.82",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -30,7 +30,7 @@ const projects = [
     img: "/timetracker.png"
   },
   { 
-    name: "simpleID", 
+    name: "SimpleID", 
     category: "Protocolo de Identidad", 
     description: "Soberanía digital mediante protocolos de identidad minimalistas y descentralizados.",
     img: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&q=80&w=1200" 
@@ -58,9 +58,9 @@ const createTextTexture = (project) => {
   // Banda de sombra suave (Vignette central) para legibilidad dinámica
   const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
   grad.addColorStop(0, 'rgba(0, 0, 0, 0)');
-  grad.addColorStop(0.2, 'rgba(0, 0, 0, 0.5)');
-  grad.addColorStop(0.5, 'rgba(0, 0, 0, 0.75)');
-  grad.addColorStop(0.8, 'rgba(0, 0, 0, 0.5)');
+  grad.addColorStop(0.2, 'rgba(0, 0, 0, 0.4)');
+  grad.addColorStop(0.5, 'rgba(0, 0, 0, 0.6)');
+  grad.addColorStop(0.8, 'rgba(0, 0, 0, 0.4)');
   grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
   
   ctx.fillStyle = grad;
@@ -68,13 +68,13 @@ const createTextTexture = (project) => {
   
   // Categoría
   ctx.font = '700 30px monospace';
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+  ctx.fillStyle = 'rgba(0, 255, 194, 0.9)';
   ctx.textAlign = 'center';
-  ctx.fillText(project.category, canvas.width / 2, 60);
+  ctx.fillText(project.category.toUpperCase(), canvas.width / 2, 60);
   
-  // Nombre (Mint Neon para contraste máximo)
+  // Nombre
   ctx.font = '900 85px Inter, sans-serif';
-  ctx.fillStyle = '#00ffc2';
+  ctx.fillStyle = '#ffffff';
   
   // Sombra de texto profunda para legibilidad sin fondo sólido
   ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
@@ -82,7 +82,7 @@ const createTextTexture = (project) => {
   ctx.shadowOffsetX = 0;
   ctx.shadowOffsetY = 5;
   
-  ctx.fillText(project.name, canvas.width / 2, 160);
+  ctx.fillText(project.name.toUpperCase(), canvas.width / 2, 160);
   
   // Descripción (Multilínea)
   ctx.font = '300 32px Inter, sans-serif';
@@ -159,7 +159,6 @@ onMounted(() => {
 
   gsap.timeline({
     scrollTrigger: {
-      id: "cylinder-st",
       trigger: sectionRef.value,
       start: "top top",
       end: "+=2000",
@@ -185,8 +184,8 @@ onUnmounted(() => {
 <template>
   <section id="cylinder-showcase-section" ref="sectionRef" class="tres-showcase">
     <div class="ui-layer">
-      <h2 class="title">Casos de Éxito</h2>
-      <p class="subtitle">Hitos de Ingeniería</p>
+      <h2 class="title">Hub de Ingeniería 3D</h2>
+      <p class="subtitle">Arquitectura de Anillo Industrial TresJS</p>
     </div>
 
     <div class="canvas-container">
@@ -206,8 +205,7 @@ onUnmounted(() => {
                   :map="projectTextures[i]" 
                   :side="2" 
                   :transparent="true"
-                  :opacity="0.65"
-                  color="#888888"
+                  :opacity="0.8"
                   :roughness="0.5"
                 />
               </TresMesh>
@@ -221,7 +219,7 @@ onUnmounted(() => {
                   :side="2"
                   :opacity="1"
                   :emissive="[0, 1, 0.7]"
-                  :emissiveIntensity="0.3"
+                  :emissiveIntensity="0.1"
                 />
               </TresMesh>
             </TresGroup>

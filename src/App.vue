@@ -100,9 +100,6 @@ onMounted(() => {
       <!-- 4. Masterclass Section -->
       <MasterclassSection />
 
-      <!-- 5. Design Showcase (Flat) -->
-      <DesignShowcase />
-
       <!-- 6. Cylinder Showcase (3D Ring) -->
       <CylinderShowcase />
 
