@@ -17,9 +17,13 @@ if (Test-Path $deployDir) {
 }
 New-Item -ItemType Directory -Path $deployDir
 
-# 4. Copiar Archivos Compilados (Frontend Únicamente)
+# 4. Copiar Archivos Compilados (Frontend + Backend API)
 Write-Host "Empaquetando Plataforma..." -ForegroundColor Yellow
-Copy-Item -Path "dist/*" -Destination $deployDir -Recurse
+Copy-Item -Path "dist/*" -Destination $deployDir -Recurse -Force
+if (Test-Path "api") {
+    # Copiamos la carpeta API completa incluyendo archivos ocultos (.htaccess)
+    Copy-Item -Path "api" -Destination $deployDir -Recurse -Force
+}
 
 # 5. Limpieza Final
 Write-Host "Limpieza completada." -ForegroundColor Green

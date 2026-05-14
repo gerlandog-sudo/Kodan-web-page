@@ -64,7 +64,7 @@ const createTextTexture = (project) => {
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   
-  ctx.font = '700 30px monospace';
+  ctx.font = '700 30px "JetBrains Mono", monospace';
   ctx.fillStyle = 'rgba(0, 255, 194, 0.9)';
   ctx.textAlign = 'center';
   ctx.fillText(project.category.toUpperCase(), canvas.width / 2, 60);
@@ -97,7 +97,7 @@ const createTextTexture = (project) => {
   
   ctx.shadowBlur = 0;
   ctx.shadowOffsetY = 0;
-  ctx.font = '700 30px monospace';
+  ctx.font = '700 30px "JetBrains Mono", monospace';
   ctx.fillStyle = '#ffffff';
   ctx.fillText('EXPLORAR ARQUITECTURA', canvas.width / 2, 440);
   
@@ -204,7 +204,7 @@ onUnmounted(() => {
 }
 
 .subtitle {
-  font-family: monospace;
+  font-family: var(--font-mono);
   color: var(--color-mint);
   letter-spacing: 4px;
   text-transform: uppercase;

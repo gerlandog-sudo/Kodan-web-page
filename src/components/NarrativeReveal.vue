@@ -216,7 +216,7 @@ onUnmounted(() => {
   bottom: 0;
   width: 250px;
   opacity: 0.35; /* Aumentado para mayor visibilidad */
-  font-family: 'Fira Code', monospace;
+  font-family: var(--font-mono);
   font-size: 0.65rem;
   color: var(--color-mint);
   text-shadow: 0 0 10px rgba(0, 255, 194, 0.4); /* Sutil resplandor técnico */

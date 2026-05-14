@@ -232,7 +232,7 @@ onMounted(() => {
 }
 
 .tech-tag {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: var(--font-mono);
   font-size: 0.77rem; /* Aumentado 10% */
   color: var(--color-mint);
   letter-spacing: 2px;
@@ -263,7 +263,7 @@ onMounted(() => {
 }
 
 .footer-text {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: var(--font-mono);
   color: var(--color-mint);
   font-size: 1.1rem;
   margin-bottom: 2rem;

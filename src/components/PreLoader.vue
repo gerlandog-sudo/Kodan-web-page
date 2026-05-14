@@ -107,7 +107,7 @@ onMounted(() => {
 }
 
 .status-text {
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.7rem;
   letter-spacing: 4px;
   color: var(--color-mint);

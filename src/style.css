@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@300;400;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,6 +6,7 @@
 
 :root {
   /* Brand Core */
+  --font-mono: 'JetBrains Mono', monospace;
   --color-mint: #00FFC2;
   --color-carbon: #2D3436;
   --color-pulse: #635BFF;
@@ -129,7 +130,7 @@ h1, h2, h3, h4 {
 /* Syntax Highlighting / Tech Text */
 .tech-data {
   color: rgba(0, 255, 194, 0.8);
-  font-family: monospace;
+  font-family: var(--font-mono);
 }
 /* 6. Efecto Mecha KODAN (Contact Buttons) */
 .fuse-button {
@@ -140,7 +141,7 @@ h1, h2, h3, h4 {
   border-radius: 4px; /* Redondeado extremadamente sutil */
   background: rgba(0, 255, 194, 0.03);
   color: var(--fuse-color);
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 2px;

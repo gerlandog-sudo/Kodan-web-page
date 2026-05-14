@@ -205,7 +205,7 @@ onUnmounted(() => {
 }
 
 .btn-text {
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 1rem;
   font-weight: bold;
   letter-spacing: 2px;
@@ -221,7 +221,7 @@ onUnmounted(() => {
   display: flex;
   justify-content: space-between;
   border-top: 1px solid rgba(255,255,255,0.05);
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.8rem;
   color: rgba(255,255,255,0.3);
   z-index: 10;
@@ -245,7 +245,7 @@ onUnmounted(() => {
 }
 
 .elite-label {
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.65rem;
   color: var(--color-mint);
   letter-spacing: 2px;

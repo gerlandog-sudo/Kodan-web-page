@@ -3,18 +3,18 @@ import { onMounted, ref } from 'vue';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import KodanLogoDark from './components/kodanLogoDark.vue';
-import StorytellingSection from './components/StorytellingSection.vue';
+import NarrativeReveal from './components/NarrativeReveal.vue';
 import ParallaxSection from './components/ParallaxSection.vue';
-import MasterclassSection from './components/MasterclassSection.vue';
-import DesignShowcase from './components/DesignShowcase.vue';
-import CylinderShowcase from './components/CylinderShowcase.vue';
+import SequentialTraceability from './components/SequentialTraceability.vue';
+import DesignShowCase from './components/DesignShowCase.vue';
+import CylinderShowCase from './components/CylinderShowCase.vue';
 import ContactFooter from './components/ContactFooter.vue';
 import ContactSystem from './components/ContactSystem.vue';
 import NotificationSystem from './components/NotificationSystem.vue';
 import PreLoader from './components/PreLoader.vue';
 import VerticalProgress from './components/VerticalProgress.vue';
-import ShowcaseHero from './components/ShowcaseHero.vue';
-import BentoShowcase from './components/BentoShowcase.vue';
+import AtmosphericEntrance from './components/AtmosphericEntrance.vue';
+import BentoGridShowCase from './components/BentoGridShowCase.vue';
 import { useNotificationStore } from './stores/notificationStore';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -136,22 +136,22 @@ onMounted(() => {
         <div ref="scrollPrompt" class="scroll-prompt">Scroll para iniciar</div>
       </section>
 
-      <!-- 2. Storytelling Section -->
-      <StorytellingSection />
+      <!-- 2. Brand Story / Manifesto -->
+      <NarrativeReveal />
 
       <!-- 3. Parallax Section (Capa de Validación Técnica) -->
       <ParallaxSection />
 
-      <!-- 4. Masterclass Section -->
-      <MasterclassSection />
+      <!-- 4. Engineering Timeline -->
+      <SequentialTraceability />
 
       <!-- 6. Cylinder Showcase (3D Ring) -->
-      <CylinderShowcase />
+      <CylinderShowCase />
 
       <!-- 7. Portal al Showcase (Ancla de Transición) -->
       <div id="showcase-anchor" class="showcase-portal">
-        <ShowcaseHero />
-        <BentoShowcase />
+        <AtmosphericEntrance />
+        <BentoGridShowCase />
       </div>
 
       <!-- 8. Footer Premium -->
@@ -203,7 +203,7 @@ onMounted(() => {
 }
 
 .scroll-prompt {
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 5px;

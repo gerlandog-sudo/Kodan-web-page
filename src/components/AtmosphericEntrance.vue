@@ -82,7 +82,7 @@ onMounted(() => {
 }
 
 .manifesto {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: var(--font-mono);
   font-size: 0.77rem;
   color: var(--color-mint);
   letter-spacing: 2px;
@@ -101,7 +101,7 @@ onMounted(() => {
 }
 
 .spec-item {
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.75rem;
   color: #666;
   letter-spacing: 3px;

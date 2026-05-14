@@ -190,7 +190,7 @@ const sortedYears = computed(() => {
 }
 
 h2 {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: var(--font-mono);
   font-size: 0.77rem;
   color: var(--color-mint);
   letter-spacing: 2px;
@@ -254,7 +254,7 @@ h2 {
 }
 
 .milestone-year {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   color: #fff;
   font-size: 1.2rem;
   font-weight: 700;
@@ -262,7 +262,7 @@ h2 {
 }
 
 .mono-title {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 1.8rem;
   color: var(--color-mint);
   margin: 0.5rem 0;
