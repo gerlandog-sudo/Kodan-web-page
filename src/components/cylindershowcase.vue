@@ -1,8 +1,7 @@
 <script setup>
-import { ref, shallowRef, onMounted, onUnmounted, computed } from 'vue';
+import { ref, shallowRef, onMounted, onUnmounted } from 'vue';
 import * as THREE from 'three';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const projects = [
   { 
@@ -30,7 +29,7 @@ const projects = [
     img: "/timetracker.png"
   },
   { 
-    name: "simpleID", 
+    name: "SimpleID", 
     category: "Protocolo de Identidad", 
     description: "Soberanía digital mediante protocolos de identidad minimalistas y descentralizados.",
     img: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&q=80&w=1200" 
@@ -55,36 +54,29 @@ const createTextTexture = (project) => {
   
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
-  // Banda de sombra suave (Vignette central) para legibilidad dinámica
   const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
   grad.addColorStop(0, 'rgba(0, 0, 0, 0)');
-  grad.addColorStop(0.2, 'rgba(0, 0, 0, 0.5)');
-  grad.addColorStop(0.5, 'rgba(0, 0, 0, 0.75)');
-  grad.addColorStop(0.8, 'rgba(0, 0, 0, 0.5)');
+  grad.addColorStop(0.2, 'rgba(0, 0, 0, 0.4)');
+  grad.addColorStop(0.5, 'rgba(0, 0, 0, 0.6)');
+  grad.addColorStop(0.8, 'rgba(0, 0, 0, 0.4)');
   grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
   
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   
-  // Categoría
   ctx.font = '700 30px monospace';
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+  ctx.fillStyle = 'rgba(0, 255, 194, 0.9)';
   ctx.textAlign = 'center';
-  ctx.fillText(project.category, canvas.width / 2, 60);
+  ctx.fillText(project.category.toUpperCase(), canvas.width / 2, 60);
   
-  // Nombre (Mint Neon para contraste máximo)
   ctx.font = '900 85px Inter, sans-serif';
-  ctx.fillStyle = '#00ffc2';
-  
-  // Sombra de texto profunda para legibilidad sin fondo sólido
+  ctx.fillStyle = '#ffffff';
   ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
   ctx.shadowBlur = 20;
   ctx.shadowOffsetX = 0;
   ctx.shadowOffsetY = 5;
+  ctx.fillText(project.name.toUpperCase(), canvas.width / 2, 160);
   
-  ctx.fillText(project.name, canvas.width / 2, 160);
-  
-  // Descripción (Multilínea)
   ctx.font = '300 32px Inter, sans-serif';
   ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
   const words = project.description.split(' ');
@@ -103,16 +95,12 @@ const createTextTexture = (project) => {
   }
   ctx.fillText(line, canvas.width / 2, y);
   
-  // Reset de sombras para el botón
   ctx.shadowBlur = 0;
   ctx.shadowOffsetY = 0;
-  
-  // Botón (Simulado)
   ctx.font = '700 30px monospace';
   ctx.fillStyle = '#ffffff';
   ctx.fillText('EXPLORAR ARQUITECTURA', canvas.width / 2, 440);
   
-  // Borde del botón
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
   ctx.lineWidth = 2;
   ctx.strokeRect(canvas.width / 2 - 220, 400, 440, 60);
@@ -124,56 +112,15 @@ const createTextTexture = (project) => {
 
 const projectLabelTextures = projects.map(p => createTextTexture(p));
 
-const currentRotation = ref(0);
-const activeIndex = computed(() => {
-  let normalized = currentRotation.value % (Math.PI * 2);
-  if (normalized < 0) normalized += Math.PI * 2;
-  
-  let closestIdx = 0;
-  let minDiff = Infinity;
-  
-  projects.forEach((_, i) => {
-    const worldAngle = (i * panelAngle + normalized) % (Math.PI * 2);
-    const diff = Math.min(worldAngle, Math.PI * 2 - worldAngle);
-    if (diff < minDiff) {
-      minDiff = diff;
-      closestIdx = i;
-    }
-  });
-  
-  return closestIdx;
-});
-
 let tickerCallback = () => {
   if (cylinderGroup.value && cylinderGroup.value.rotation) {
-    if (!ScrollTrigger.isScrolling()) {
-      cylinderGroup.value.rotation.y -= 0.002;
-    }
-    currentRotation.value = cylinderGroup.value.rotation.y;
+    cylinderGroup.value.rotation.y -= 0.005; // Rotación constante
   }
 };
 
 onMounted(() => {
   if (!sectionRef.value) return;
   isReady.value = true;
-
-  gsap.timeline({
-    scrollTrigger: {
-      id: "cylinder-st",
-      trigger: sectionRef.value,
-      start: "top top",
-      end: "+=2000",
-      pin: true,
-      scrub: 1,
-      onUpdate: (self) => {
-        if (cylinderGroup.value && cylinderGroup.value.rotation) {
-          cylinderGroup.value.rotation.y = -(self.progress * Math.PI * 2);
-          currentRotation.value = cylinderGroup.value.rotation.y;
-        }
-      }
-    }
-  });
-
   gsap.ticker.add(tickerCallback);
 });
 
@@ -185,8 +132,8 @@ onUnmounted(() => {
 <template>
   <section id="cylinder-showcase-section" ref="sectionRef" class="tres-showcase">
     <div class="ui-layer">
-      <h2 class="title">Casos de Éxito</h2>
-      <p class="subtitle">Hitos de Ingeniería</p>
+      <h2 class="title">Hub de Ingeniería 3D</h2>
+      <p class="subtitle">Anillo Industrial en Rotación Continua</p>
     </div>
 
     <div class="canvas-container">
@@ -199,20 +146,17 @@ onUnmounted(() => {
         <TresGroup :rotation="[0.45, 0, 0]" :scale="[1.3, 0.85, 0.65]">
           <TresGroup ref="cylinderGroup">
             <TresGroup v-for="(project, i) in projects" :key="i" :rotation="[0, i * panelAngle, 0]">
-              <!-- Imagen del Proyecto -->
               <TresMesh>
                 <TresCylinderGeometry :args="[4, 4, 5, 64, 1, true, -arcLength/2, arcLength]" />
                 <TresMeshStandardMaterial 
                   :map="projectTextures[i]" 
                   :side="2" 
                   :transparent="true"
-                  :opacity="0.65"
-                  color="#888888"
+                  :opacity="0.8"
                   :roughness="0.5"
                 />
               </TresMesh>
 
-              <!-- Texto en Etiqueta (Curvado) -->
               <TresMesh :position="[0, 0, 0.08]">
                 <TresCylinderGeometry :args="[4.15, 4.15, 2.5, 64, 1, true, -arcLength/2.5, arcLength/1.25]" />
                 <TresMeshStandardMaterial 
@@ -221,7 +165,7 @@ onUnmounted(() => {
                   :side="2"
                   :opacity="1"
                   :emissive="[0, 1, 0.7]"
-                  :emissiveIntensity="0.3"
+                  :emissiveIntensity="0.1"
                 />
               </TresMesh>
             </TresGroup>
@@ -251,7 +195,7 @@ onUnmounted(() => {
 }
 
 .title {
-  font-size: 3.15rem;
+  font-size: clamp(2rem, 5vw, 3.15rem);
   font-weight: 900;
   color: #fff;
   text-transform: uppercase;
@@ -267,7 +211,6 @@ onUnmounted(() => {
   font-size: 0.9rem;
   opacity: 0.8;
 }
-
 
 .canvas-container {
   position: absolute;

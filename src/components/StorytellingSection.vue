@@ -99,19 +99,19 @@ onMounted(() => {
   headlineTL = gsap.timeline({
     scrollTrigger: {
       trigger: titleRef.value,
-      start: "top 85%",
+      start: "top 95%",
       toggleActions: "play none none none"
     }
   });
 
   headlineTL.fromTo(scanlineRef.value, 
     { left: "-15%" },
-    { left: "115%", duration: 2, ease: "power2.inOut" }
+    { left: "115%", duration: 0.8, ease: "power2.out" }
   );
 
   headlineTL.fromTo(titleRef.value,
     { backgroundPosition: "100% 0%", opacity: 0.3 },
-    { backgroundPosition: "0% 0%", opacity: 1, duration: 2, ease: "power2.inOut" },
+    { backgroundPosition: "0% 0%", opacity: 1, duration: 0.8, ease: "power2.out" },
     "<"
   );
 
@@ -120,14 +120,14 @@ onMounted(() => {
   manifestoAnim = gsap.from(words, {
     scrollTrigger: {
       trigger: manifestoRef.value,
-      start: "top 80%",
+      start: "top 95%",
       toggleActions: "play none none none"
     },
     opacity: 0,
-    filter: "blur(15px)",
-    y: 20,
-    stagger: 0.02,
-    duration: 1.2,
+    filter: "blur(8px)",
+    y: 15,
+    stagger: 0.008,
+    duration: 0.5,
     ease: "power2.out"
   });
 

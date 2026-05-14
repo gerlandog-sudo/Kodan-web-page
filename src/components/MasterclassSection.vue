@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextPlugin } from 'gsap/TextPlugin';
@@ -82,13 +82,34 @@ onMounted(() => {
   });
 });
 
-const milestones = [
+interface Milestone {
+  year: string;
+  title: string;
+  desc: string;
+}
+
+const milestones: Milestone[] = [
   { year: "2026", title: "kodanHUB", desc: "Orquestación Centralizada de APIs. Hub agnóstico para la gestión inteligente de modelos de IA, control de tokens y conectividad empresarial de alta disponibilidad." },
   { year: "2026", title: "SmartCook", desc: "Inteligencia Visual Multimodal. Motor de Visión Computacional que decodifica heladeras, alacenas y capturas múltiples para transformar cualquier inventario visual en una experiencia gastronómica de precisión." },
   { year: "2025", title: "TimeTracker Mobile", desc: "La extensión móvil de TimeTracker traslada la complejidad de nuestra arquitectura de datos a una interfaz de alta fidelidad. Diseñada para una interacción de baja fricción, permite el monitoreo de KPIs críticos y la validación de desvíos operativos." },
   { year: "2025", title: "TimeTracker", desc: "Observabilidad de Recursos y Data Intelligence. Arquitectura multi-tenant diseñada para la analítica predictiva de costos y la optimización granular de capital humano." },
   { year: "2023", title: "simpleID", desc: "Inmutabilidad y Criptografía Aplicada. Protocolos de identidad descentralizada (DLT) con integración de biometría avanzada para la seguridad en el borde de la red." },
 ];
+
+// Agrupar milestones por año
+const groupedMilestones = computed(() => {
+  const groups: Record<string, Milestone[]> = {};
+  milestones.forEach(m => {
+    if (!groups[m.year]) groups[m.year] = [];
+    groups[m.year].push(m);
+  });
+  return groups;
+});
+
+// Obtener años ordenados descendente
+const sortedYears = computed(() => {
+  return Object.keys(groupedMilestones.value).sort((a, b) => b > a ? 1 : -1);
+});
 </script>
 
 <template>
@@ -102,17 +123,22 @@ const milestones = [
       </header>
 
       <div class="milestones-list">
-        <div v-for="(milestone, index) in milestones" :key="index" class="milestone-item">
-          <div class="milestone-marker"></div>
-          <div class="milestone-body">
-            <span class="milestone-year">{{ milestone.year }}</span>
-            <h3 
-              :ref="setTerminalRef" 
-              :data-text="milestone.title" 
-              class="mono-title clickable"
-              @click="scrollToShowcase(milestone.title)"
-            >_</h3>
-            <p>{{ milestone.desc }}</p>
+        <div v-for="year in sortedYears" :key="year" class="milestone-year-row">
+          <div class="year-marker-container">
+            <span class="milestone-year">{{ year }}</span>
+            <div class="milestone-marker"></div>
+          </div>
+          
+          <div class="products-grid">
+            <div v-for="(milestone, idx) in groupedMilestones[year]" :key="idx" class="product-column">
+              <h3 
+                :ref="setTerminalRef" 
+                :data-text="milestone.title" 
+                class="mono-title clickable"
+                @click="scrollToShowcase(milestone.title)"
+              >_</h3>
+              <p class="description">{{ milestone.desc }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -124,8 +150,9 @@ const milestones = [
 .masterclass-container {
   background: #121212;
   position: relative;
-  padding: 10rem 10vw;
+  padding: 10rem 0; /* Sin padding horizontal para unificar ejes */
   min-height: 150vh;
+  width: 100%;
 }
 
 .platinum-lifeline {
@@ -140,7 +167,8 @@ const milestones = [
 }
 
 .masterclass-content {
-  padding-right: 5vw;
+  width: 100%;
+  padding: 0 12vw 0 10vw; /* Compactado a la derecha */
   position: relative;
   z-index: 2;
   text-align: right;
@@ -175,45 +203,68 @@ h2 {
 .milestones-list {
   display: flex;
   flex-direction: column;
-  gap: 4rem;
+  gap: 8rem;
 }
 
-.milestone-item {
-  position: relative;
+.milestone-year-row {
   display: flex;
-  gap: 3rem;
-  align-items: flex-start;
-  flex-direction: row-reverse;
+  flex-direction: column;
+  gap: 2rem;
+  position: relative;
+}
+
+.year-marker-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1.5rem;
+  position: absolute;
+  /* Contenido termina en 12vw. Linea en 5vw. 
+     Distancia = 7vw. */
+  right: calc(-7vw - 7px); 
+  top: 0;
+  height: 2.8rem;
+  z-index: 10;
 }
 
 .milestone-marker {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   background: #BFC1C2;
   border-radius: 50%;
-  margin-top: 0.8rem;
-  box-shadow: 0 0 10px #BFC1C2;
+  box-shadow: 0 0 12px #BFC1C2;
   flex-shrink: 0;
 }
 
-.milestone-body {
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 5rem;
+  justify-content: flex-end;
+  direction: rtl; 
+  margin-right: 5rem; /* Homogeneizado con el gap de 5rem entre columnas */
+}
+
+.product-column {
   display: flex;
   flex-direction: column;
-  align-items: flex-end; /* Alineación a la derecha como el resto de la sección */
+  align-items: flex-end;
   text-align: right;
+  direction: ltr; /* Texto normal dentro de celdas RTL */
 }
 
 .milestone-year {
   font-family: 'JetBrains Mono', monospace;
-  color: var(--text-body);
-  font-size: 1.1rem;
-  opacity: 0.6;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 .mono-title {
   font-family: 'JetBrains Mono', monospace;
   font-size: 1.8rem;
-  color: #fff;
+  color: var(--color-mint);
   margin: 0.5rem 0;
 }
 
@@ -227,11 +278,20 @@ h2 {
   transform: translateX(-10px);
 }
 
-p {
+.description {
   color: var(--text-body);
-  max-width: 400px;
+  max-width: 450px;
   line-height: 1.6;
   margin-left: auto;
+  font-size: 0.95rem;
+  opacity: 0.8;
+}
+
+@media (max-width: 1024px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
 }
 
 @media (max-width: 768px) {

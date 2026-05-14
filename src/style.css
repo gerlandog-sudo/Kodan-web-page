@@ -37,7 +37,13 @@
   box-sizing: border-box;
 }
 
-html, body {
+html {
+  overflow-x: hidden;
+  overflow-y: scroll; /* Forzamos scrollbar para evitar saltos de layout */
+  scroll-behavior: smooth;
+}
+
+body {
   background: var(--bg-global) no-repeat;
   background-attachment: fixed;
   color: var(--text-body);
@@ -45,6 +51,7 @@ html, body {
   transition: color 0.3s ease;
   min-height: 100vh;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 h1, h2, h3, h4 {
