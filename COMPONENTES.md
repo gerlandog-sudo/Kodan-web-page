@@ -1,32 +1,49 @@
-# Ecosistema de Componentes - KodanWEB
+# Ecosistema de Componentes - KodanWEB (v1.1.000)
 
-Este documento detalla el inventario de componentes del proyecto. Los elementos en **negrita** representan el stack activo en producción.
+Inventario técnico bajo arquitectura de **Refactorización Semántica**. El sistema prioriza el comportamiento agnóstico al contenido y la resiliencia operativa.
 
-## Core & Layout
-- **[App.vue](file:///c:/Proyectos%20Antigravity/kodanWEB/src/App.vue)**: Orquestador principal y punto de entrada de la SPA.
+## Core & Estructura Global
 
-## Componentes de Interfaz (`src/components`)
+| Nombre | Detalle Técnico / Comportamental |
+| :--- | :--- |
+| **App.vue** | Orquestador de ciclo de vida global. Gestiona la secuenciación narrativa y la telemetría de scroll mediante GSAP/ScrollTrigger. |
+| **PreLoader.vue** | Inicialización de activos y simulación de arranque (System Boot). Gestiona el estado de entrada a la aplicación. |
+| **VerticalProgress.vue** | Componente de telemetría lateral. Muestra el progreso relativo del usuario en el eje Y. |
 
-### Narrativa y Estructura
-- **[NarrativeReveal.vue](file:///c:/Proyectos%20Antigravity/kodanWEB/src/components/NarrativeReveal.vue)**: Sección de manifiesto con interacción de cursor y flujo de datos.
-- **[ParallaxSection.vue](file:///c:/Proyectos%20Antigravity/kodanWEB/src/components/ParallaxSection.vue)**: Visualización técnica con profundidad 3D y botones reactivos.
-- **[SequentialTraceability.vue](file:///c:/Proyectos%20Antigravity/kodanWEB/src/components/SequentialTraceability.vue)**: Timeline de trazabilidad de ingeniería con efecto typewriter.
-- **[VerticalProgress.vue](file:///c:/Proyectos%20Antigravity/kodanWEB/src/components/VerticalProgress.vue)**: Indicador de scroll lateral de alta fidelidad.
+## Capa de Narrativa y Validación
 
-### Visualización y Showcase
-- **[CylinderShowCase.vue](file:///c:/Proyectos%20Antigravity/kodanWEB/src/components/CylinderShowCase.vue)**: Hub de ingeniería 3D (Three.js) con anillo rotatorio.
-- **[AtmosphericEntrance.vue](file:///c:/Proyectos%20Antigravity/kodanWEB/src/components/AtmosphericEntrance.vue)**: Cabecera técnica de la sección de artefactos.
-- **[BentoGridShowCase.vue](file:///c:/Proyectos%20Antigravity/kodanWEB/src/components/BentoGridShowCase.vue)**: Galería bento optimizada para visualización de activos.
-- **[ShowcaseCard.vue](file:///c:/Proyectos%20Antigravity/kodanWEB/src/components/ShowcaseCard.vue)**: Unidad atómica de visualización dentro de la galería bento.
-- [DesignShowCase.vue](file:///c:/Proyectos%20Antigravity/kodanWEB/src/components/DesignShowCase.vue): Prototipo de scroll horizontal (Legado/Inactivo).
+| Nombre | Detalle Técnico / Comportamental |
+| :--- | :--- |
+| **NarrativeReveal.vue** | Comportamiento de revelación progresiva. Sincroniza el manifiesto de marca con el scroll del usuario. |
+| **ParallaxSection.vue** | Enfoque de profundidad técnica. Utiliza capas de parallax para validación visual de rigor de ingeniería. |
+| **SequentialTraceability.vue** | Comportamiento de trazabilidad lineal. Renderizado secuencial de hitos con efectos de entrada tipo typewriter. |
 
-### Sistemas Globales y Branding
-- **[PreLoader.vue](file:///c:/Proyectos%20Antigravity/kodanWEB/src/components/PreLoader.vue)**: Pantalla de carga con lógica de escaneo y branding.
-- **[kodanLogoDark.vue](file:///c:/Proyectos%20Antigravity/kodanWEB/src/components/kodanLogoDark.vue)**: Identidad visual primaria para fondos oscuros.
-- [kodanLogoLight.vue](file:///c:/Proyectos%20Antigravity/kodanWEB/src/components/kodanLogoLight.vue): Variante clara institucional (Inactivo).
-- **[ContactFooter.vue](file:///c:/Proyectos%20Antigravity/kodanWEB/src/components/ContactFooter.vue)**: Cierre monumental con interacción de contacto.
-- **[ContactSystem.vue](file:///c:/Proyectos%20Antigravity/kodanWEB/src/components/ContactSystem.vue)**: Lógica y UI del modal de contacto profesional.
-- **[NotificationSystem.vue](file:///c:/Proyectos%20Antigravity/kodanWEB/src/components/NotificationSystem.vue)**: Orquestador de notificaciones y feedback de usuario.
+## Capa de Visualización (Real-Time Engine)
+
+| Nombre | Detalle Técnico / Comportamental |
+| :--- | :--- |
+| **CylinderShowCase.vue** | Hub 3D orbital. Implementa un motor Three.js para la visualización inmersiva de proyectos core. |
+| **AtmosphericEntrance.vue** | Transición de atmósfera. Genera un puente visual y técnico hacia el área de artefactos. |
+| **BentoGridShowCase.vue** | Motor de visualización dinámica. Consulta la API en tiempo real y gestiona un sistema de fallback resiliente. |
+| **ShowcaseCard.vue** | Unidad atómica de representación visual. Maneja el escalado y carga de assets individuales. |
+| DesignShowCase.vue | Slider horizontal legado. Comportamiento de desplazamiento lateral (Inactivo). |
+
+## Sistemas de Identidad e Interacción
+
+| Nombre | Detalle Técnico / Comportamental |
+| :--- | :--- |
+| **kodanLogoDark.vue** | Núcleo de identidad visual persistente optimizado para fondos de alto contraste. |
+| kodanLogoLight.vue | Variante de identidad visual clara. Preservado para contextos institucionales (Inactivo). |
+| **ContactFooter.vue** | Ancla de interacción final. Define el punto de cierre monumental de la experiencia de usuario. |
+| **ContactSystem.vue** | Procesador de interacción. Maneja el flujo de entrada de datos y validación de formularios. |
+| **NotificationSystem.vue** | Puente de feedback (FeedbackBridge). Orquesta las notificaciones de estado del sistema. |
+
+## Capa de Backend API
+
+| Nombre | Detalle Técnico / Comportamental |
+| :--- | :--- |
+| **api/index.php** | Orquestador de backend. Realiza escaneo de disco en tiempo real para el descubrimiento de activos. |
+| **api/.htaccess** | Controlador de enrutamiento. Asegura la resolución de endpoints de API en entornos Apache/Nginx. |
 
 ---
-*Última actualización: 2026-05-14 - Refactorización semántica y unificación de Case.*
+*Documentación técnica consolidada - Milestone v1.1.000.*

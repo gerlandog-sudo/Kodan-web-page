@@ -132,8 +132,8 @@ onUnmounted(() => {
 <template>
   <section id="cylinder-showcase-section" ref="sectionRef" class="tres-showcase">
     <div class="ui-layer">
-      <h2 class="title">Hub de Ingeniería 3D</h2>
-      <p class="subtitle">Anillo Industrial en Rotación Continua</p>
+      <h2 class="title">Casos de Éxito</h2>
+      <p class="subtitle">Core Assets — Despliegue de soluciones robustas y microservicios visuales.</p>
     </div>
 
     <div class="canvas-container">
@@ -143,7 +143,7 @@ onUnmounted(() => {
         <TresPointLight :position="[10, 10, 10]" :intensity="8" />
         <TresPointLight :position="[-10, -10, 10]" :intensity="4" color="#00ffc2" />
 
-        <TresGroup :rotation="[0.45, 0, 0]" :scale="[1.3, 0.85, 0.65]">
+        <TresGroup :rotation="[0.45, 0, 0]" :scale="[1.3, 0.85, 0.65]" :position="[0, -0.2, 0]">
           <TresGroup ref="cylinderGroup">
             <TresGroup v-for="(project, i) in projects" :key="i" :rotation="[0, i * panelAngle, 0]">
               <TresMesh>
@@ -187,7 +187,7 @@ onUnmounted(() => {
 
 .ui-layer {
   position: absolute;
-  top: 5vh;
+  top: 8vh;
   right: 5vw;
   z-index: 10;
   pointer-events: none;
@@ -208,7 +208,7 @@ onUnmounted(() => {
   color: var(--color-mint);
   letter-spacing: 4px;
   text-transform: uppercase;
-  font-size: 0.9rem;
+  font-size: 0.77rem;
   opacity: 0.8;
 }
 

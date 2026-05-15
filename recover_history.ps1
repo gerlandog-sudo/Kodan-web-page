@@ -1,5 +1,5 @@
 $brainPath = "C:\Users\gerla\.gemini\antigravity\brain"
-$outputPath = "c:\Proyectos Antigravity\KODAN\HISTORIAL_RECUPERADO.html"
+$outputPath = "c:\Proyectos_Antigravity\KODAN\HISTORIAL_RECUPERADO.html"
 
 $header = @"
 <!DOCTYPE html>

@@ -11,8 +11,7 @@
       <div class="floating-grid">
         <!-- Bloque Lateral Izquierdo: Modelos -->
         <div class="data-card left" ref="cardLeft">
-          <span class="tech-tag">ARCH_MODELS</span>
-          <h3>Modelos y Arquitectura</h3>
+          <h3 class="mint">Modelos y Arquitectura</h3>
           <p>Microservicios desacoplados y Clean Architecture como estándar. Diseñamos sistemas preparados para la evolución constante.</p>
         </div>
 
@@ -23,8 +22,7 @@
 
         <!-- Bloque Lateral Derecho: Stack -->
         <div class="data-card right" ref="cardRight">
-          <span class="tech-tag">PERFORMANCE_STACK</span>
-          <h3>Stack & Performance</h3>
+          <h3 class="mint">Stack & Performance</h3>
           <p>Dominio en ecosistemas Reactivos y Cloud-Native. Optimizamos cada línea de código para lograr latencias mínimas y escalabilidad infinita.</p>
         </div>
       </div>
@@ -33,14 +31,9 @@
     <!-- CAPA 2: FOOTER DE SECCIÓN (INVITACIÓN) -->
     <div class="section-footer" ref="footerLayer">
       <div class="footer-content">
-        <p class="footer-text">La complejidad técnica es nuestra materia prima.</p>
-        <button 
-          class="fuse-button neon-shadow" 
-          @click="handleFuseClick"
-          ref="fuseBtn"
-        >
-          Hablemos de su próximo desafío
-        </button>
+        <p class="footer-text">
+          <span class="mint">Sistemas de Misión Crítica:</span> Desplegamos soluciones agnósticas al stack, centradas en la resiliencia y la inmutabilidad del código. Desde la modernización de <span class="mint">Legacy Systems</span> hasta la creación de productos <span class="mint">Cloud-Native</span>, aplicamos patrones de diseño avanzados para garantizar activos digitales de alta fidelidad y mantenimiento nulo.
+        </p>
       </div>
     </div>
   </section>
@@ -60,28 +53,8 @@ const headline = ref(null);
 const cardLeft = ref(null);
 const cardRight = ref(null);
 const footerLayer = ref(null);
-const fuseBtn = ref(null);
 
-const handleFuseClick = () => {
-  const btn = fuseBtn.value;
-  if (!btn || btn.classList.contains('is-firing')) return;
 
-  // Reset para permitir re-disparo si ya estaba consumido
-  btn.classList.remove('is-consumed');
-  btn.classList.add('is-firing');
-  gsap.set(btn, { '--fuse-angle': '0deg' });
-  
-  // Animación de la "mecha" recorriendo el borde
-  gsap.to(btn, {
-    '--fuse-angle': '360deg',
-    duration: 1.5,
-    ease: "power2.inOut",
-    onComplete: () => {
-      btn.classList.remove('is-firing');
-      btn.classList.add('is-consumed');
-    }
-  });
-};
 
 onMounted(() => {
   // Movimiento de Fondo (Aumentado para mayor profundidad)
@@ -264,14 +237,20 @@ onMounted(() => {
 
 .footer-text {
   font-family: var(--font-mono);
-  color: var(--color-mint);
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.fuse-button {
-  margin-top: 2rem;
+.mint {
+  color: var(--color-mint);
 }
+
+
 
 /* RESPONSIVE */
 @media (max-width: 1100px) {

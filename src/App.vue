@@ -78,32 +78,25 @@ onMounted(() => {
       x: 0,
       duration: 1.2,
       ease: "power3.inOut",
-      overwrite: "auto",
-      onComplete: () => {
-        // Limpiamos estrictamente 'x' para que el scrub de la intro (que usa xPercent) no tenga offsets residuales
-        if (window.scrollY < 1200) {
-          gsap.set(logoWrapper.value, { clearProps: "x" });
-        }
-      }
+      overwrite: "auto"
     });
   };
 
+  // 5. Viaje del Logo (Lateral)
   ScrollTrigger.create({
     trigger: "#cylinder-showcase-section",
     start: "bottom 30%",
     onEnter: () => {
       gsap.to(logoWrapper.value, {
-        x: "70vw", // Desplazamiento lateral sin tocar 'left'
+        x: "70vw", 
         duration: 1.2,
-        ease: "power3.inOut",
-        overwrite: "auto"
+        ease: "power3.inOut"
       });
     },
-    onEnterBack: resetLogoX,
     onLeaveBack: resetLogoX
   });
 
-  // 3. Conmutación Binaria del Prompt
+  // 7. Conmutación Binaria del Prompt
   gsap.to(scrollPrompt.value, {
     scrollTrigger: {
       trigger: "body",
