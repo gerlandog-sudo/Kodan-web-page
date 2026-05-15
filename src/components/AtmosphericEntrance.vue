@@ -60,7 +60,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   padding: 15vh 5vw 10vh;
-  background: #000;
+  background: #050505;
   position: relative;
   overflow: hidden;
 }

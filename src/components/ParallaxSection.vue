@@ -136,7 +136,7 @@ onMounted(() => {
   width: 100%;
   min-height: 150vh; /* Aumentado para mayor recorrido parallax */
   overflow: hidden;
-  background: #000;
+  background: #050505;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -165,10 +165,10 @@ onMounted(() => {
   position: absolute;
   inset: 0;
   background: linear-gradient(to bottom, 
-    #000 0%, 
+    #050505 0%, 
     transparent 20%, 
     transparent 80%, 
-    #000 100%
+    #050505 100%
   );
   z-index: 2;
 }

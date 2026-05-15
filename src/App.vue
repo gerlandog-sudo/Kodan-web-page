@@ -235,12 +235,12 @@ onMounted(() => {
   letter-spacing: 5px;
   color: var(--color-mint);
   opacity: 0.5; /* Opacidad Base Estable */
-  animation: bounce 2s infinite ease-in-out;
+  animation: drift 3s infinite ease-in-out;
 }
 
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+@keyframes drift {
+  0%, 100% { transform: translateY(0); opacity: 0.3; }
+  50% { transform: translateY(-8px); opacity: 0.7; }
 }
 
 

@@ -88,12 +88,12 @@ const store = useNotificationStore();
 .error .fill { background: var(--error); }
 .warning .fill { background: var(--warning); }
 
-/* Animación de Resorte (Spring) */
+/* Animación Industrial (Precisión) */
 .notification-enter-active {
-  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.5); /* Spring Curve */
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); /* easeOutExpo */
 }
 .notification-leave-active {
-  transition: all 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  transition: all 0.4s cubic-bezier(0.7, 0, 0.84, 0); /* easeInExpo */
 }
 
 .notification-enter-from {
