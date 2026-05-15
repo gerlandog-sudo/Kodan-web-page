@@ -1,20 +1,22 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref, defineAsyncComponent } from 'vue';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import KodanLogoDark from './components/kodanLogoDark.vue';
-import NarrativeReveal from './components/NarrativeReveal.vue';
-import ParallaxSection from './components/ParallaxSection.vue';
-import SequentialTraceability from './components/SequentialTraceability.vue';
-import DesignShowCase from './components/DesignShowCase.vue';
-import CylinderShowCase from './components/CylinderShowCase.vue';
-import ContactFooter from './components/ContactFooter.vue';
-import ContactSystem from './components/ContactSystem.vue';
-import NotificationSystem from './components/NotificationSystem.vue';
 import PreLoader from './components/PreLoader.vue';
+import NotificationSystem from './components/NotificationSystem.vue';
 import VerticalProgress from './components/VerticalProgress.vue';
-import AtmosphericEntrance from './components/AtmosphericEntrance.vue';
-import BentoGridShowCase from './components/BentoGridShowCase.vue';
+import ContactSystem from './components/ContactSystem.vue';
+
+// Async Components para Optimización de Performance
+const NarrativeReveal = defineAsyncComponent(() => import('./components/NarrativeReveal.vue'));
+const ParallaxSection = defineAsyncComponent(() => import('./components/ParallaxSection.vue'));
+const SequentialTraceability = defineAsyncComponent(() => import('./components/SequentialTraceability.vue'));
+const DesignShowCase = defineAsyncComponent(() => import('./components/DesignShowCase.vue'));
+const CylinderShowCase = defineAsyncComponent(() => import('./components/cylindershowcase.vue'));
+const AtmosphericEntrance = defineAsyncComponent(() => import('./components/AtmosphericEntrance.vue'));
+const BentoGridShowCase = defineAsyncComponent(() => import('./components/BentoGridShowCase.vue'));
+const ContactFooter = defineAsyncComponent(() => import('./components/ContactFooter.vue'));
 import { useNotificationStore } from './stores/notificationStore';
 
 gsap.registerPlugin(ScrollTrigger);
