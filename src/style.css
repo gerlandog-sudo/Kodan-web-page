@@ -39,6 +39,11 @@
   box-sizing: border-box;
 }
 
+::selection {
+  background: var(--color-mint);
+  color: var(--color-carbon);
+}
+
 html {
   overflow-x: hidden;
   overflow-y: scroll; /* Forzamos scrollbar para evitar saltos de layout */
@@ -46,10 +51,12 @@ html {
 }
 
 body {
-  background: var(--bg-global) no-repeat;
+  background: radial-gradient(circle at center, #0A0A0A 0%, #050505 100%);
   background-attachment: fixed;
   color: var(--text-body);
-  font-family: 'Liberation Sans', 'Inter', system-ui, sans-serif;
+  font-family: var(--font-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   transition: color 0.3s ease;
   min-height: 100vh;
   line-height: 1.6;
@@ -204,6 +211,11 @@ h1, h2, h3, h4 {
 .fuse-button:hover:not(.is-firing) {
   background: rgba(0, 255, 194, 0.05);
   box-shadow: 0 0 20px rgba(0, 255, 194, 0.1);
+}
+
+.fuse-button:active:not(.is-firing) {
+  transform: scale(0.98);
+  background: rgba(0, 255, 194, 0.08);
 }
 /* 7. Hardening & Accessibility Resilience */
 @media (prefers-reduced-motion: reduce) {

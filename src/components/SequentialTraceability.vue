@@ -278,8 +278,9 @@ h2 {
 }
 
 .mono-title.clickable:hover {
-  color: var(--color-mint);
-  transform: translateX(-10px);
+  color: #fff;
+  transform: translateX(-10px) scale(1.02);
+  text-shadow: 0 0 15px var(--color-mint);
 }
 
 .description {
