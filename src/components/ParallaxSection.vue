@@ -32,7 +32,7 @@
     <div class="section-footer" ref="footerLayer">
       <div class="footer-content max-w-4xl mx-auto">
         <p class="mission-critical-text">
-          <span class="highlight-mint">Sistemas de Misión Crítica:</span> Desplegamos soluciones agnósticas al stack, centradas en la resiliencia y la inmutabilidad del código. Desde la modernización de <span class="highlight-mint">Legacy Systems</span> hasta la creación de productos <span class="highlight-mint">Cloud-Native</span>, aplicamos patrones de diseño avanzados para garantizar activos digitales de alta fidelidad y mantenimiento nulo.
+          <span class="highlight-mint">Sistemas de Misión Crítica:</span> Desplegamos soluciones agnósticas al stack, centradas en la resiliencia y la inmutabilidad del código. Desde la modernización de <span class="highlight-mint underline decoration-mint/30" data-tooltip="Sistemas heredados de alta complejidad">Legacy Systems</span> hasta la creación de productos <span class="highlight-mint underline decoration-mint/30" data-tooltip="Arquitecturas diseñadas para la nube">Cloud-Native</span>, aplicamos patrones de diseño avanzados para garantizar activos digitales de alta fidelidad y mantenimiento nulo.
         </p>
       </div>
     </div>
@@ -226,12 +226,14 @@ onMounted(() => {
 
 .tech-tag {
   font-family: var(--font-mono);
-  font-size: 0.77rem; /* Aumentado 10% */
+  font-size: 0.9rem;
   color: var(--color-mint);
-  letter-spacing: 2px;
+  letter-spacing: 1px;
+  font-weight: 700;
+  text-transform: uppercase;
   display: block;
   margin-bottom: 1rem;
-  opacity: 0.7;
+  opacity: 1;
 }
 
 .data-card h3 {

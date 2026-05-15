@@ -55,11 +55,11 @@ const createTextTexture = (project) => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
   const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-  grad.addColorStop(0, 'rgba(0, 0, 0, 0)');
-  grad.addColorStop(0.2, 'rgba(0, 0, 0, 0.4)');
-  grad.addColorStop(0.5, 'rgba(0, 0, 0, 0.6)');
-  grad.addColorStop(0.8, 'rgba(0, 0, 0, 0.4)');
-  grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+  grad.addColorStop(0, 'rgba(0, 0, 0, 0.4)');
+  grad.addColorStop(0.3, 'rgba(0, 0, 0, 0.7)');
+  grad.addColorStop(0.5, 'rgba(0, 0, 0, 0.85)');
+  grad.addColorStop(0.7, 'rgba(0, 0, 0, 0.7)');
+  grad.addColorStop(1, 'rgba(0, 0, 0, 0.4)');
   
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -97,7 +97,7 @@ const createTextTexture = (project) => {
   
   ctx.shadowBlur = 0;
   ctx.shadowOffsetY = 0;
-  ctx.font = '700 30px "JetBrains Mono", monospace';
+  ctx.font = '700 34px "JetBrains Mono", monospace';
   ctx.fillStyle = '#ffffff';
   ctx.fillText('EXPLORAR ARQUITECTURA', canvas.width / 2, 440);
   

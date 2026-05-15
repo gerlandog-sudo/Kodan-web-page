@@ -92,8 +92,8 @@ const milestones: Milestone[] = [
   { year: "2026", title: "kodanHUB", desc: "Orquestación Centralizada de APIs. Hub agnóstico para la gestión inteligente de modelos de IA, control de tokens y conectividad empresarial de alta disponibilidad." },
   { year: "2026", title: "SmartCook", desc: "Inteligencia Visual Multimodal. Motor de Visión Computacional que decodifica heladeras, alacenas y capturas múltiples para transformar cualquier inventario visual en una experiencia gastronómica de precisión." },
   { year: "2025", title: "TimeTracker Mobile", desc: "La extensión móvil de TimeTracker traslada la complejidad de nuestra arquitectura de datos a una interfaz de alta fidelidad. Diseñada para una interacción de baja fricción, permite el monitoreo de KPIs críticos y la validación de desvíos operativos." },
-  { year: "2025", title: "TimeTracker", desc: "Observabilidad de Recursos y Data Intelligence. Arquitectura multi-tenant diseñada para la analítica predictiva de costos y la optimización granular de capital humano." },
-  { year: "2023", title: "simpleID", desc: "Inmutabilidad y Criptografía Aplicada. Protocolos de identidad descentralizada (DLT) con integración de biometría avanzada para la seguridad en el borde de la red." },
+  { year: "2025", title: "TimeTracker", desc: "Observabilidad de Recursos y Data Intelligence. Arquitectura <span class='underline decoration-mint/30' data-tooltip='Arquitectura para múltiples clientes aislados'>multi-tenant</span> diseñada para la analítica predictiva de costos y la optimización granular de capital humano." },
+  { year: "2023", title: "simpleID", desc: "Inmutabilidad y Criptografía Aplicada. Protocolos de identidad descentralizada (<span class='underline decoration-mint/30' data-tooltip='Distributed Ledger Technology'>DLT</span>) con integración de <span class='underline decoration-mint/30' data-tooltip='Huellas, Iris o Reconocimiento Facial'>biometría avanzada</span> para la seguridad en el borde de la red." },
 ];
 
 // Agrupar milestones por año
@@ -141,7 +141,7 @@ const sortedYears = computed(() => {
                 @click="scrollToShowcase(milestone.title)"
                 @keyup.enter="scrollToShowcase(milestone.title)"
               >_</h3>
-              <p class="description">{{ milestone.desc }}</p>
+              <p class="description" v-html="milestone.desc"></p>
             </div>
           </div>
         </div>

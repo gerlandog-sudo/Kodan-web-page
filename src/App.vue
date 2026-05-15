@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import KodanLogoDark from './components/kodanLogoDark.vue';
@@ -27,6 +27,28 @@ const isLoaded = ref(false);
 
 let logoObserver = null;
 let isLogoRight = false;
+
+const navShortcuts = (e) => {
+  // Ignorar si el usuario está escribiendo en un input
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+  const anchors = {
+    '1': '#hero',
+    '2': '#mission',
+    '3': '#traceability',
+    '4': '#artifacts',
+    '5': '#contact'
+  };
+  
+  const target = anchors[e.key];
+  if (target) {
+    const el = document.querySelector(target);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+      notificationStore.addNotification(`Navegando a: ${target.replace('#', '')}`, 'success', 2000);
+    }
+  }
+};
 
 const handleLogoSync = () => {
   const cylinderSection = document.getElementById('cylinder-showcase-section');
@@ -83,6 +105,8 @@ const handleLoaded = () => {
 };
 
 onMounted(() => {
+  window.addEventListener('keydown', navShortcuts);
+
   // 1. Estado Inicial Absoluto
   gsap.set(logoWrapper.value, {
     top: "50%",
@@ -134,6 +158,10 @@ onMounted(() => {
     ease: "power2.inOut"
   });
 });
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', navShortcuts);
+});
 </script>
 
 <template>
@@ -152,30 +180,30 @@ onMounted(() => {
     <!-- Secuenciación Narrativa -->
     <div class="page-content">
       <!-- 1. Hero / Intro -->
-      <section class="hero-spacer">
+      <section id="hero" class="hero-spacer">
         <div ref="scrollPrompt" class="scroll-prompt">Scroll para iniciar</div>
       </section>
 
-      <!-- 2. Brand Story / Manifesto -->
-      <NarrativeReveal />
-
-      <!-- 3. Parallax Section (Capa de Validación Técnica) -->
-      <ParallaxSection />
+      <!-- 2. Brand Story + Parallax (Mission Group) -->
+      <div id="mission">
+        <NarrativeReveal />
+        <ParallaxSection />
+      </div>
 
       <!-- 4. Engineering Timeline -->
-      <SequentialTraceability />
+      <SequentialTraceability id="traceability" />
 
-      <!-- 6. Cylinder Showcase (3D Ring) -->
-      <CylinderShowCase />
-
-      <!-- 7. Portal al Showcase (Ancla de Transición) -->
-      <div id="showcase-anchor" class="showcase-portal">
-        <AtmosphericEntrance />
-        <BentoGridShowCase />
+      <!-- 4. Artifacts Group (Cylinder + Bento) -->
+      <div id="artifacts">
+        <CylinderShowCase />
+        <div id="showcase-anchor" class="showcase-portal">
+          <AtmosphericEntrance />
+          <BentoGridShowCase />
+        </div>
       </div>
 
       <!-- 8. Footer Premium -->
-      <ContactFooter />
+      <ContactFooter id="contact" />
 
       <!-- Espaciador Final removido para clavar el footer al fondo -->
     </div>
