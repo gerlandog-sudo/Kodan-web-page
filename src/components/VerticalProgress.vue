@@ -134,7 +134,7 @@ onUnmounted(() => {
   position: absolute;
   right: 2rem;
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: 0.7rem;
   color: #fff;
   opacity: 0;
   transform: translateX(10px);
