@@ -56,6 +56,7 @@ onUnmounted(() => {
         class="fuse-button rectangular-btn" 
         @click="handleFuseClick"
         ref="fuseBtn"
+        aria-label="Deslizar para iniciar contacto"
       >
         INICIAR CONTACTO
       </button>

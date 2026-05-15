@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -49,11 +49,13 @@ onUnmounted(() => {
 const openContact = () => {
   isOpen.value = true;
   currentStep.value = 0;
-  gsap.from(".modal-glass", {
-    scale: 0.8,
-    opacity: 0,
-    duration: 0.5,
-    ease: "power3.out"
+  nextTick(() => {
+    gsap.from(".modal-glass", {
+      scale: 0.8,
+      opacity: 0,
+      duration: 0.5,
+      ease: "power3.out"
+    });
   });
 };
 
@@ -93,7 +95,32 @@ const handleNextClick = (e: MouseEvent) => {
   });
 };
 
+const errorMessage = ref('');
+
+const validateStep = () => {
+  const currentField = steps[currentStep.value].field as keyof typeof form.value;
+  const value = form.value[currentField];
+  
+  if (!value || value.trim() === '') {
+    errorMessage.value = 'Este campo es obligatorio';
+    return false;
+  }
+  
+  if (currentField === 'email') {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(value)) {
+      errorMessage.value = 'Email no válido';
+      return false;
+    }
+  }
+  
+  errorMessage.value = '';
+  return true;
+};
+
 const nextStep = () => {
+  if (!validateStep()) return;
+
   if (currentStep.value < steps.length - 1) {
     gsap.to(".step-content", {
       x: -20,
@@ -109,17 +136,31 @@ const nextStep = () => {
   }
 };
 
+const isTransmitting = ref(false);
+
 const sendWhatsApp = () => {
-  const phone = "541144488277";
-  const message = `¡Hola kodan! Me contacto desde la web.%0A%0A` +
-    `*Nombre:* ${form.value.name || 'No especificado'}%0A` +
-    `*Email:* ${form.value.email || 'No especificado'}%0A` +
-    `*Proyecto:* ${form.value.projectType || 'No especificado'}%0A` +
-    `*Presupuesto:* ${form.value.budget || 'No especificado'}%0A` +
-    `*Timeline:* ${form.value.timeline || 'No especificado'}`;
+  isTransmitting.value = true;
   
-  window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
-  closeContact();
+  // Pequeña pausa dramática para deleite visual
+  setTimeout(() => {
+    const phone = "541144488277";
+    const message = `¡Hola kodan! Me contacto desde la web.%0A%0A` +
+      `*Nombre:* ${form.value.name || 'No especificado'}%0A` +
+      `*Email:* ${form.value.email || 'No especificado'}%0A` +
+      `*Proyecto:* ${form.value.projectType || 'No especificado'}%0A` +
+      `*Presupuesto:* ${form.value.budget || 'No especificado'}%0A` +
+      `*Timeline:* ${form.value.timeline || 'No especificado'}`;
+    
+    window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
+    
+    // Reset form after delay
+    setTimeout(() => {
+      isTransmitting.value = false;
+      closeContact();
+      // Reset form data
+      Object.keys(form.value).forEach(k => (form.value as any)[k] = '');
+    }, 1000);
+  }, 1500);
 };
 
 const progress = computed(() => ((currentStep.value + 1) / steps.length) * 100);
@@ -128,7 +169,12 @@ const progress = computed(() => ((currentStep.value + 1) / steps.length) * 100);
 <template>
   <div class="contact-system" :class="{ 'is-active': isVisible }">
     <!-- Floating Trigger -->
-    <button class="orb-trigger" @click="openContact" v-if="!isOpen && !isFooterVisible">
+    <button 
+      class="orb-trigger" 
+      @click="openContact" 
+      v-if="!isOpen && !isFooterVisible"
+      aria-label="Abrir formulario de contacto"
+    >
       <div class="orb-core"></div>
       <div class="orb-pulse pulse-1"></div>
       <div class="orb-pulse pulse-2"></div>
@@ -139,13 +185,22 @@ const progress = computed(() => ((currentStep.value + 1) / steps.length) * 100);
     <Teleport to="body">
       <div v-if="isOpen" class="modal-overlay" @click.self="closeContact">
         <div class="modal-glass">
-          <button class="close-btn" @click="closeContact">✕</button>
+          <button 
+            class="close-btn" 
+            @click="closeContact"
+            aria-label="Cerrar formulario de contacto"
+          >✕</button>
           
           <div class="progress-bar">
             <div class="progress-fill" :style="{ width: progress + '%' }"></div>
           </div>
 
-          <div class="step-content">
+          <div v-if="isTransmitting" class="transmission-overlay">
+            <div class="scanner-line"></div>
+            <span class="transmission-text">ENVIANDO TRANSMISIÓN...</span>
+          </div>
+
+          <div v-else class="step-content">
             <span class="step-number">PASO 0{{ currentStep + 1 }}</span>
             <h2 class="step-question">{{ steps[currentStep].question }}</h2>
             
@@ -153,9 +208,11 @@ const progress = computed(() => ((currentStep.value + 1) / steps.length) * 100);
               v-model="form[steps[currentStep].field as keyof typeof form]"
               :placeholder="steps[currentStep].placeholder"
               class="step-input"
+              :class="{ 'is-invalid': errorMessage }"
               @keyup.enter="nextStep"
               autofocus
             />
+            <span v-if="errorMessage" class="error-text">{{ errorMessage }}</span>
 
             <div class="step-footer">
               <span class="hint">Presiona ENTER para continuar</span>
@@ -375,6 +432,44 @@ const progress = computed(() => ((currentStep.value + 1) / steps.length) * 100);
   color: rgba(255,255,255,0.3);
   text-transform: uppercase;
   letter-spacing: 1px;
+}
+
+.step-input.is-invalid {
+  border-color: var(--error);
+  box-shadow: 0 0 15px rgba(252, 92, 101, 0.1);
+}
+
+.error-text {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--error);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: -0.5rem;
+}
+
+.transmission-overlay {
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.transmission-text {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-mint);
+  letter-spacing: 4px;
+  animation: blink 0.5s infinite alternate;
+}
+
+@keyframes blink {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
 }
 
 @media (max-width: 480px) {

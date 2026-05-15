@@ -43,7 +43,7 @@ onMounted(() => {
         capturada en fragmentos de ejecución.
       </p>
       <div class="tech-specs">
-        <span class="spec-item">STABILITY: 100%</span>
+        <span class="spec-item">STABILITY: <span class="pulse-value">100%</span></span>
         <span class="spec-item">CORE: VUE/GSAP</span>
         <span class="spec-item">STATUS: DEPLOYED</span>
       </div>
@@ -107,6 +107,16 @@ onMounted(() => {
   letter-spacing: 3px;
   display: flex;
   align-items: center;
+}
+
+.pulse-value {
+  color: var(--color-mint);
+  animation: soft-pulse 2s infinite alternate;
+}
+
+@keyframes soft-pulse {
+  from { opacity: 0.7; filter: brightness(0.8); }
+  to { opacity: 1; filter: brightness(1.2); }
 }
 
 .spec-item::before {

@@ -135,7 +135,11 @@ const sortedYears = computed(() => {
                 :ref="setTerminalRef" 
                 :data-text="milestone.title" 
                 class="mono-title clickable"
+                role="button"
+                tabindex="0"
+                :aria-label="`Ver detalle de ${milestone.title}`"
                 @click="scrollToShowcase(milestone.title)"
+                @keyup.enter="scrollToShowcase(milestone.title)"
               >_</h3>
               <p class="description">{{ milestone.desc }}</p>
             </div>

@@ -75,7 +75,7 @@ onMounted(() => {
 
 <template>
   <section class="bento-showcase">
-    <div class="grid-container">
+    <div v-if="artifacts.length > 0" class="grid-container">
       <ShowcaseCard 
         v-for="(item, index) in artifacts" 
         :key="index" 
@@ -83,10 +83,22 @@ onMounted(() => {
         :size="item.size"
       />
     </div>
+    <div v-else class="empty-state">
+      <p class="tech-data">NO ARTIFACTS FOUND // SYSTEM READY</p>
+    </div>
   </section>
 </template>
 
 <style scoped>
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 40vh;
+  border: 1px dashed rgba(0, 255, 194, 0.2);
+  border-radius: 4px;
+}
+
 .bento-showcase {
   width: 100%;
   padding: 0 5vw 10vh;

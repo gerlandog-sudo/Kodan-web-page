@@ -32,14 +32,30 @@ const handleMouseEnter = () => {
 const handleMouseLeave = () => {
   isHovered.value = false;
 };
+
+const spotlightX = ref(0);
+const spotlightY = ref(0);
+
+const handleMouseMove = (e: MouseEvent) => {
+  if (!isHovered.value) return;
+  const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+  spotlightX.value = e.clientX - rect.left;
+  spotlightY.value = e.clientY - rect.top;
+};
 </script>
 
 <template>
   <div 
     class="showcase-card glass-premium"
     :class="[size || 'small', { 'is-active': isHovered }]"
+    :style="{ '--x': spotlightX + 'px', '--y': spotlightY + 'px' }"
+    role="button"
+    tabindex="0"
+    aria-label="Ver detalle del proyecto"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
+    @mousemove="handleMouseMove"
+    @keyup.enter="handleMouseEnter"
   >
     <div class="card-inner">
       <!-- Asset Real (Visible en Hover) -->
@@ -67,6 +83,9 @@ const handleMouseLeave = () => {
 
       <!-- Efectos de Borde Mint -->
       <div class="mint-glow"></div>
+      
+      <!-- Spotlight Delight -->
+      <div class="spotlight-overlay" :class="{ 'is-visible': isHovered }"></div>
     </div>
   </div>
 </template>
@@ -158,6 +177,24 @@ const handleMouseLeave = () => {
 
 .is-active .mint-glow {
   opacity: 0.4;
+}
+
+.spotlight-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    600px circle at var(--x) var(--y),
+    rgba(0, 255, 194, 0.08),
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.spotlight-overlay.is-visible {
+  opacity: 1;
 }
 
 @keyframes scan {
