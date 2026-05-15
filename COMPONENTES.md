@@ -1,49 +1,42 @@
 # Ecosistema de Componentes - KodanWEB (v1.1.000)
 
-Inventario técnico bajo arquitectura de **Refactorización Semántica**. El sistema prioriza el comportamiento agnóstico al contenido y la resiliencia operativa.
+Inventario técnico de componentes basado en comportamiento. Los elementos en **negrita** representan el stack activo en producción.
 
-## Core & Estructura Global
-
-| Nombre | Detalle Técnico / Comportamental |
+## Core & Backend
+| Componente | Descripción / Comportamiento |
 | :--- | :--- |
-| **App.vue** | Orquestador de ciclo de vida global. Gestiona la secuenciación narrativa y la telemetría de scroll mediante GSAP/ScrollTrigger. |
-| **PreLoader.vue** | Inicialización de activos y simulación de arranque (System Boot). Gestiona el estado de entrada a la aplicación. |
-| **VerticalProgress.vue** | Componente de telemetría lateral. Muestra el progreso relativo del usuario en el eje Y. |
+| **App.vue** | Orquestador principal y punto de entrada de la SPA. Controla la jerarquía de secciones. |
+| **api/index.php** | Endpoint maestro con lógica de scanner de disco en tiempo real para activos. |
+| **api/.htaccess** | Gateway de enrutamiento para asegurar la integridad de las peticiones al backend. |
 
-## Capa de Narrativa y Validación
+## Interfaz de Usuario (`src/components`)
 
-| Nombre | Detalle Técnico / Comportamental |
+### Narrativa y Estructura
+| Componente | Descripción / Comportamiento |
 | :--- | :--- |
-| **NarrativeReveal.vue** | Comportamiento de revelación progresiva. Sincroniza el manifiesto de marca con el scroll del usuario. |
-| **ParallaxSection.vue** | Enfoque de profundidad técnica. Utiliza capas de parallax para validación visual de rigor de ingeniería. |
-| **SequentialTraceability.vue** | Comportamiento de trazabilidad lineal. Renderizado secuencial de hitos con efectos de entrada tipo typewriter. |
+| **NarrativeReveal.vue** | Sección de manifiesto con interacción de cursor y flujo de datos secuencial. |
+| **ParallaxSection.vue** | Capa de visualización técnica con profundidad 3D y elementos reactivos. |
+| **SequentialTraceability.vue** | Timeline de ingeniería con efecto typewriter y trazabilidad de eventos. |
+| **VerticalProgress.vue** | Indicador de navegación lateral de alta fidelidad (Scroll Progress). |
 
-## Capa de Visualización (Real-Time Engine)
-
-| Nombre | Detalle Técnico / Comportamental |
+### Visualización y Showcase (Bento Engine)
+| Componente | Descripción / Comportamiento |
 | :--- | :--- |
-| **CylinderShowCase.vue** | Hub 3D orbital. Implementa un motor Three.js para la visualización inmersiva de proyectos core. |
-| **AtmosphericEntrance.vue** | Transición de atmósfera. Genera un puente visual y técnico hacia el área de artefactos. |
-| **BentoGridShowCase.vue** | Motor de visualización dinámica. Consulta la API en tiempo real y gestiona un sistema de fallback resiliente. |
-| **ShowcaseCard.vue** | Unidad atómica de representación visual. Maneja el escalado y carga de assets individuales. |
-| DesignShowCase.vue | Slider horizontal legado. Comportamiento de desplazamiento lateral (Inactivo). |
+| **CylinderShowCase.vue** | Hub de ingeniería 3D (Three.js) con anillo rotatorio y pinning optimizado. |
+| **AtmosphericEntrance.vue** | Cabecera técnica inmersiva para la sección de artefactos. |
+| **BentoGridShowCase.vue** | Galería dinámica con selección aleatoria y scanner de disco (Real-Time). |
+| **ShowcaseCard.vue** | Unidad atómica de visualización reactiva para la grilla Bento. |
+| [DesignShowcase.vue](file:///c:/Proyectos_Antigravity/kodanWEB/src/components/DesignShowcase.vue) | Galería de activos estáticos y recursos visuales (Legado/Inactivo). |
 
-## Sistemas de Identidad e Interacción
-
-| Nombre | Detalle Técnico / Comportamental |
+### Sistemas Globales y Branding
+| Componente | Descripción / Comportamiento |
 | :--- | :--- |
-| **kodanLogoDark.vue** | Núcleo de identidad visual persistente optimizado para fondos de alto contraste. |
-| kodanLogoLight.vue | Variante de identidad visual clara. Preservado para contextos institucionales (Inactivo). |
-| **ContactFooter.vue** | Ancla de interacción final. Define el punto de cierre monumental de la experiencia de usuario. |
-| **ContactSystem.vue** | Procesador de interacción. Maneja el flujo de entrada de datos y validación de formularios. |
-| **NotificationSystem.vue** | Puente de feedback (FeedbackBridge). Orquesta las notificaciones de estado del sistema. |
-
-## Capa de Backend API
-
-| Nombre | Detalle Técnico / Comportamental |
-| :--- | :--- |
-| **api/index.php** | Orquestador de backend. Realiza escaneo de disco en tiempo real para el descubrimiento de activos. |
-| **api/.htaccess** | Controlador de enrutamiento. Asegura la resolución de endpoints de API en entornos Apache/Nginx. |
+| **PreLoader.vue** | Pantalla de carga con lógica de escaneo de sistema y branding. |
+| **kodanLogoDark.vue** | Identidad visual primaria optimizada para entornos oscuros. |
+| [kodanLogoLight.vue](file:///c:/Proyectos_Antigravity/kodanWEB/src/components/kodanLogoLight.vue) | Variante clara institucional (Inactivo). |
+| **ContactFooter.vue** | Cierre monumental con interacción de contacto y branding de salida. |
+| **ContactSystem.vue** | Lógica y UI del modal de contacto y validación de datos. |
+| **NotificationSystem.vue** | Orquestador central de notificaciones y feedback de usuario. |
 
 ---
-*Documentación técnica consolidada - Milestone v1.1.000.*
+*Última actualización: 2026-05-15 - Consolidación de Milestone 1.1.000 con soporte Real-Time Backend.*

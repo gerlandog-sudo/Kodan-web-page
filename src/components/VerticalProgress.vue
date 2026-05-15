@@ -25,7 +25,7 @@ onUnmounted(() => {
     <div class="progress-track">
       <div 
         class="progress-thumb" 
-        :style="{ height: progress + '%' }"
+        :style="{ transform: `scaleY(${progress / 100})` }"
       ></div>
     </div>
     <div class="progress-info">
@@ -60,11 +60,13 @@ onUnmounted(() => {
 
 .progress-thumb {
   width: 100%;
+  height: 100%;
   background: var(--color-mint);
   position: absolute;
   top: 0;
   left: 0;
-  transition: height 0.1s linear;
+  transform-origin: top;
+  will-change: transform;
   box-shadow: 0 0 10px var(--color-mint);
 }
 

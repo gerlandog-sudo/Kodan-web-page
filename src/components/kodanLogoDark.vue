@@ -175,6 +175,7 @@ const handleMouseEnter = () => {
   
   scanAnim.to(scanline.value, {
     left: "110%",
+    opacity: 1,
     duration: 1.8,
     ease: "power2.inOut"
   }, "+=0.1");
@@ -216,7 +217,7 @@ const handleMouseLeave = () => {
       textShadow: "none",
       duration: 0.3
     });
-    gsap.set(scanline.value, { left: "-15%" });
+    gsap.set(scanline.value, { left: "-15%", opacity: 0 });
   }
 };
 
@@ -285,7 +286,7 @@ onUnmounted(() => {
 
 .brand-subtitle {
   width: 100%;
-  font-family: "Aptos Display", "Aptos", "Inter", sans-serif;
+  font-family: var(--font-main);
   font-size: 4.25cqw;
   font-weight: 500;
   text-transform: none;
@@ -316,6 +317,7 @@ onUnmounted(() => {
   height: 100%;
   background: linear-gradient(90deg, transparent, rgba(224, 224, 224, 0.6), transparent);
   pointer-events: none;
+  opacity: 0;
 }
 
 .kodan-text {

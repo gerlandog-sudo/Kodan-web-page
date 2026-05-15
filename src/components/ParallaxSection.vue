@@ -11,7 +11,7 @@
       <div class="floating-grid">
         <!-- Bloque Lateral Izquierdo: Modelos -->
         <div class="data-card left" ref="cardLeft">
-          <h3 class="mint">Modelos y Arquitectura</h3>
+          <span class="tech-tag highlight-mint">Modelos y Arquitectura</span>
           <p>Microservicios desacoplados y Clean Architecture como estándar. Diseñamos sistemas preparados para la evolución constante.</p>
         </div>
 
@@ -22,7 +22,7 @@
 
         <!-- Bloque Lateral Derecho: Stack -->
         <div class="data-card right" ref="cardRight">
-          <h3 class="mint">Stack & Performance</h3>
+          <span class="tech-tag highlight-mint">Stack & Performance</span>
           <p>Dominio en ecosistemas Reactivos y Cloud-Native. Optimizamos cada línea de código para lograr latencias mínimas y escalabilidad infinita.</p>
         </div>
       </div>
@@ -30,9 +30,9 @@
 
     <!-- CAPA 2: FOOTER DE SECCIÓN (INVITACIÓN) -->
     <div class="section-footer" ref="footerLayer">
-      <div class="footer-content">
-        <p class="footer-text">
-          <span class="mint">Sistemas de Misión Crítica:</span> Desplegamos soluciones agnósticas al stack, centradas en la resiliencia y la inmutabilidad del código. Desde la modernización de <span class="mint">Legacy Systems</span> hasta la creación de productos <span class="mint">Cloud-Native</span>, aplicamos patrones de diseño avanzados para garantizar activos digitales de alta fidelidad y mantenimiento nulo.
+      <div class="footer-content max-w-4xl mx-auto">
+        <p class="mission-critical-text">
+          <span class="highlight-mint">Sistemas de Misión Crítica:</span> Desplegamos soluciones agnósticas al stack, centradas en la resiliencia y la inmutabilidad del código. Desde la modernización de <span class="highlight-mint">Legacy Systems</span> hasta la creación de productos <span class="highlight-mint">Cloud-Native</span>, aplicamos patrones de diseño avanzados para garantizar activos digitales de alta fidelidad y mantenimiento nulo.
         </p>
       </div>
     </div>
@@ -53,8 +53,28 @@ const headline = ref(null);
 const cardLeft = ref(null);
 const cardRight = ref(null);
 const footerLayer = ref(null);
+const fuseBtn = ref(null);
 
+const handleFuseClick = () => {
+  const btn = fuseBtn.value;
+  if (!btn || btn.classList.contains('is-firing')) return;
 
+  // Reset para permitir re-disparo si ya estaba consumido
+  btn.classList.remove('is-consumed');
+  btn.classList.add('is-firing');
+  gsap.set(btn, { '--fuse-angle': '0deg' });
+  
+  // Animación de la "mecha" recorriendo el borde
+  gsap.to(btn, {
+    '--fuse-angle': '360deg',
+    duration: 1.5,
+    ease: "power2.inOut",
+    onComplete: () => {
+      btn.classList.remove('is-firing');
+      btn.classList.add('is-consumed');
+    }
+  });
+};
 
 onMounted(() => {
   // Movimiento de Fondo (Aumentado para mayor profundidad)
@@ -237,20 +257,29 @@ onMounted(() => {
 
 .footer-text {
   font-family: var(--font-mono);
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 1.05rem;
-  line-height: 1.8;
-  margin-bottom: 2.5rem;
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.mint {
   color: var(--color-mint);
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
 }
 
+.mission-critical-text {
+  font-family: var(--font-main);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(1.1rem, 1.5vw, 1.4rem);
+  line-height: 1.8;
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
 
+.highlight-mint {
+  color: var(--color-mint);
+  font-weight: 700;
+}
+
+.fuse-button {
+  margin-top: 2rem;
+}
 
 /* RESPONSIVE */
 @media (max-width: 1100px) {

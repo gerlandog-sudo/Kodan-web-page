@@ -21,20 +21,69 @@ gsap.registerPlugin(ScrollTrigger);
 
 const notificationStore = useNotificationStore();
 const logoWrapper = ref(null);
+const logoInner = ref(null);
 const scrollPrompt = ref(null);
 const isLoaded = ref(false);
 
+let logoObserver = null;
+let isLogoRight = false;
+
+const handleLogoSync = () => {
+  const cylinderSection = document.getElementById('cylinder-showcase-section');
+  if (!cylinderSection || !logoInner.value) return;
+
+  if (logoObserver) logoObserver.disconnect();
+
+  logoObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const rect = entry.boundingClientRect;
+        
+        // El cilindro está FUERA del viewport por arriba (usuario bajó al bento)
+        if (!entry.isIntersecting && rect.top < 0) {
+          if (!isLogoRight) {
+            isLogoRight = true;
+            gsap.to(logoInner.value, {
+              x: window.innerWidth - 300 - 80,
+              duration: 1.2,
+              ease: "expo.out",
+              overwrite: "auto"
+            });
+          }
+        } 
+        // El cilindro está ENTRANDO o es VISIBLE (usuario está en Cylinder o subiendo)
+        else if (entry.isIntersecting) {
+          if (isLogoRight) {
+            isLogoRight = false;
+            gsap.to(logoInner.value, {
+              x: 0,
+              duration: 1.0,
+              ease: "expo.out",
+              overwrite: "auto"
+            });
+          }
+        }
+      });
+    },
+    {
+      threshold: 0.1,
+      rootMargin: "0px"
+    }
+  );
+
+  logoObserver.observe(cylinderSection);
+};
+
 const handleLoaded = () => {
   isLoaded.value = true;
-  // Refrescar ScrollTrigger después de que el DOM sea visible y el preloader se retire
-  // Damos más tiempo (500ms) para que el layout de Masterclass se estabilice
   setTimeout(() => {
     ScrollTrigger.refresh();
-  }, 500);
+    handleLogoSync(); // Sincronizamos el logo al cargar
+  }, 1000);
 };
 
 onMounted(() => {
-  // 1. Estado Inicial Absoluto (Control total GSAP)
+  // 1. Estado Inicial Absoluto
   gsap.set(logoWrapper.value, {
     top: "50%",
     left: "50%",
@@ -44,13 +93,13 @@ onMounted(() => {
     opacity: 1
   });
 
-  // 3. Animación Intro Logo (Hero → Header)
+  // 2. Animación Intro Logo (Hero → Header)
   gsap.to(logoWrapper.value, {
     scrollTrigger: {
       trigger: "body",
       start: "top top",
       end: "500px top",
-      scrub: true, // Sincronía instantánea sin inercia para evitar saltos al volver al TOP
+      scrub: true,
       invalidateOnRefresh: true,
       onRefresh: (self) => {
         if (self.progress === 0) {
@@ -69,34 +118,10 @@ onMounted(() => {
     xPercent: 0,
     yPercent: 0,
     scale: 0.75,
-    ease: "none" // Lineal para el scrub
+    ease: "none"
   });
 
-  // 4. Logo ↔ Portal: Viaje lateral usando transform (X) para no romper el scrub de 'left'
-  const resetLogoX = () => {
-    gsap.to(logoWrapper.value, {
-      x: 0,
-      duration: 1.2,
-      ease: "power3.inOut",
-      overwrite: "auto"
-    });
-  };
-
-  // 5. Viaje del Logo (Lateral)
-  ScrollTrigger.create({
-    trigger: "#cylinder-showcase-section",
-    start: "bottom 30%",
-    onEnter: () => {
-      gsap.to(logoWrapper.value, {
-        x: "70vw", 
-        duration: 1.2,
-        ease: "power3.inOut"
-      });
-    },
-    onLeaveBack: resetLogoX
-  });
-
-  // 7. Conmutación Binaria del Prompt
+  // 3. Prompt de Scroll
   gsap.to(scrollPrompt.value, {
     scrollTrigger: {
       trigger: "body",
@@ -119,7 +144,9 @@ onMounted(() => {
     
     <!-- Capa de Marca Dinámica (Persistente) -->
     <div ref="logoWrapper" class="logo-dynamic-wrapper">
-      <KodanLogoDark :size="400" />
+      <div ref="logoInner" class="logo-inner-travel">
+        <KodanLogoDark :size="400" />
+      </div>
     </div>
 
     <!-- Secuenciación Narrativa -->
@@ -176,6 +203,12 @@ onMounted(() => {
   z-index: 1000;
   will-change: transform, top, left;
   pointer-events: none;
+  width: 400px;
+}
+
+.logo-inner-travel {
+  width: 100%;
+  will-change: transform;
 }
 
 .logo-dynamic-wrapper > * {

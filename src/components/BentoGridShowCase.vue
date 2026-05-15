@@ -25,6 +25,8 @@ const staticFallback = [
   '/assets/animations/hero-synapse-preview-CP83ds5W.gif'
 ];
 
+const emit = defineEmits(['ready']);
+
 // Lógica de obtención y selección aleatoria (Hybrid: API -> Fallback)
 const refreshArtifacts = async () => {
   let allAnimations = [];
@@ -32,7 +34,11 @@ const refreshArtifacts = async () => {
   
   try {
     const response = await fetch('/api/animations');
-    if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+    const contentType = response.headers.get('content-type');
+    
+    if (!response.ok || !contentType || !contentType.includes('application/json')) {
+      throw new Error(`Invalid API Response: ${response.status} (${contentType})`);
+    }
     
     allAnimations = await response.json();
     
@@ -41,10 +47,8 @@ const refreshArtifacts = async () => {
     }
     
     source = 'REAL-TIME API';
-    console.log(`%c[KODAN] Bento Engine: Data loaded from ${source}`, 'color: #00FFC2; font-weight: bold;');
   } catch (error) {
     source = 'RESILIENCE FALLBACK';
-    console.warn(`%c[KODAN] Bento Engine: Switching to ${source} due to: ${error.message}`, 'color: #FFA500; font-weight: bold;');
     allAnimations = staticFallback;
   }
 
@@ -57,6 +61,11 @@ const refreshArtifacts = async () => {
     src,
     size: sizes[index] || 'small'
   }));
+  
+  // Notificar al padre que el layout se ha estabilizado
+  setTimeout(() => {
+    emit('ready');
+  }, 100);
 };
 
 onMounted(() => {

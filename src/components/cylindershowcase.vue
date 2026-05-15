@@ -69,7 +69,7 @@ const createTextTexture = (project) => {
   ctx.textAlign = 'center';
   ctx.fillText(project.category.toUpperCase(), canvas.width / 2, 60);
   
-  ctx.font = '900 85px Inter, sans-serif';
+  ctx.font = '800 85px Sora, sans-serif';
   ctx.fillStyle = '#ffffff';
   ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
   ctx.shadowBlur = 20;
@@ -77,7 +77,7 @@ const createTextTexture = (project) => {
   ctx.shadowOffsetY = 5;
   ctx.fillText(project.name.toUpperCase(), canvas.width / 2, 160);
   
-  ctx.font = '300 32px Inter, sans-serif';
+  ctx.font = '300 32px Sora, sans-serif';
   ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
   const words = project.description.split(' ');
   let line = '';
@@ -133,7 +133,8 @@ onUnmounted(() => {
   <section id="cylinder-showcase-section" ref="sectionRef" class="tres-showcase">
     <div class="ui-layer">
       <h2 class="title">Casos de Éxito</h2>
-      <p class="subtitle">Core Assets — Despliegue de soluciones robustas y microservicios visuales.</p>
+      <p class="subtitle">Core Assets</p>
+      <p class="description-small">Despliegue de soluciones robustas y microservicios visuales.</p>
     </div>
 
     <div class="canvas-container">
@@ -143,7 +144,7 @@ onUnmounted(() => {
         <TresPointLight :position="[10, 10, 10]" :intensity="8" />
         <TresPointLight :position="[-10, -10, 10]" :intensity="4" color="#00ffc2" />
 
-        <TresGroup :rotation="[0.45, 0, 0]" :scale="[1.3, 0.85, 0.65]" :position="[0, -0.2, 0]">
+        <TresGroup :rotation="[0.45, 0, 0]" :scale="[1.3, 0.85, 0.65]">
           <TresGroup ref="cylinderGroup">
             <TresGroup v-for="(project, i) in projects" :key="i" :rotation="[0, i * panelAngle, 0]">
               <TresMesh>
@@ -187,7 +188,7 @@ onUnmounted(() => {
 
 .ui-layer {
   position: absolute;
-  top: 8vh;
+  top: 5vh;
   right: 5vw;
   z-index: 10;
   pointer-events: none;
@@ -199,7 +200,7 @@ onUnmounted(() => {
   font-weight: 900;
   color: #fff;
   text-transform: uppercase;
-  letter-spacing: -2px;
+  letter-spacing: -0.01em;
   margin: 0;
 }
 
@@ -208,8 +209,18 @@ onUnmounted(() => {
   color: var(--color-mint);
   letter-spacing: 4px;
   text-transform: uppercase;
-  font-size: 0.77rem;
-  opacity: 0.8;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.9;
+}
+
+.description-small {
+  font-family: var(--font-main);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  font-weight: 300;
+  max-width: 300px;
+  margin-left: auto;
 }
 
 .canvas-container {
